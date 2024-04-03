@@ -225,6 +225,14 @@ background-color: white;
 }
 
 
+.dropdown-item a {
+    color: blue !important; /* Change this to your desired color */
+}
+
+	.dropdown-item a:hover {
+    color: blue !important; /* Change this to your desired hover color */
+    font-size:12px;
+}
 
 
 </style>
@@ -301,22 +309,22 @@ background-color: white;
         <a class="wishlist-icon" href="{% url 'wishlist' %}"><i class="far fa-heart"></i></a>
         <a class="shopping-cart" href="{% url 'Cart_page' %}"><i class="fas fa-shopping-cart"></i></a>
 
-<a class="dropdown-toggle hidden-arrow " style="border: none; " href="#" id="navbarDropdownMenuLink" role="button" data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
-			<i class="fas fa-search"></i> <!-- Search icon -->
-		</a>
-		<ul class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdownMenuLink" style="background-color: rgb(180, 180, 180)" >
-			<li>
-				<div class="input-group mt-2 mx-2" >
-					<div class="form-outline w-auto" data-mdb-input-init >
-						<input type="search" id="search-input-dropdown" class="form-control" style="width: 280px;" />
-						<label class="form-label" for="search-input-dropdown" style="width: 200px;">Search</label>
-					</div>
-				</div>
-			</li>
-			{% for painting in paintings %}
-			<li class="dropdown-item" style=" display: none;"  data-name="{{ painting.pname }}"><a href="{% url 'Single_page' painting.id %}">{{ painting.pname }}</a></li>
-			{% endfor %}
-		</ul>
+<a class="dropdown-toggle hidden-arrow" style="border: none;" href="#" id="navbarDropdownMenuLink" role="button" data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
+    <i class="fas fa-search"></i> <!-- Search icon -->
+</a>
+<ul class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdownMenuLink" style="background-color: white;">
+    <li>
+        <div class="input-group mt-2 mx-2">
+            <div class="form-outline w-auto" data-mdb-input-init>
+                <input type="search" id="search-input-dropdown" class="form-control" style="width: 280px;" placeholder="Search here" />
+                <label class="form-label" for="search-input-dropdown" style="width: 200px;"></label>
+            </div>
+        </div>
+    </li>
+    {% for painting in paintings %}
+    <li class="dropdown-item" style="display: none;" data-name="{{ painting.pname }}"><a href="{% url 'Single_page' painting.id %}">{{ painting.pname }}</a></li>
+    {% endfor %}
+</ul>
 
 
 	  </div>
@@ -828,45 +836,48 @@ Embark on a journey of artistic exploration with mixed media, where various mate
 </script>
 
 	<script>
-	const searchInputDropdown = document.getElementById('search-input-dropdown');
-	const dropdownToggle = document.getElementById('navbarDropdownMenuLink');
-	const dropdownOptions = document.querySelectorAll('.dropdown-item');
+    const searchInputDropdown = document.getElementById('search-input-dropdown');
+    const dropdownToggle = document.getElementById('navbarDropdownMenuLink');
+    const dropdownOptions = document.querySelectorAll('.dropdown-item');
+    const MAX_DISPLAYED_OPTIONS = 5; // Maximum number of options to display
 
-	// Toggle dropdown menu visibility when dropdown button is clicked
-	dropdownToggle.addEventListener('click', () => {
-		const dropdownMenu = dropdownToggle.nextElementSibling;
-		dropdownMenu.classList.toggle('show');
-	});
+    // Toggle dropdown menu visibility when dropdown button is clicked
+    dropdownToggle.addEventListener('click', () => {
+        const dropdownMenu = dropdownToggle.nextElementSibling;
+        dropdownMenu.classList.toggle('show');
+    });
 
-	// Filter dropdown items based on user input
-	searchInputDropdown.addEventListener('input', () => {
-		const filter = searchInputDropdown.value.toLowerCase();
+    // Filter dropdown items based on user input
+    searchInputDropdown.addEventListener('input', () => {
+        const filter = searchInputDropdown.value.toLowerCase();
+        let displayedCount = 0;
 
-		dropdownOptions.forEach((el) => {
-			const elText = el.textContent.trim().toLowerCase();
-			const isIncluded = elText.includes(filter);
-			if (!isIncluded) {
-				el.style.display = 'none'; // Hide items that don't match the input
-			} else {
-				el.style.display = 'block'; // Show items that match the input
-			}
-		});
-	});
+        dropdownOptions.forEach((el) => {
+            const elText = el.textContent.trim().toLowerCase();
+            const isIncluded = elText.includes(filter);
+            if (!isIncluded || displayedCount >= MAX_DISPLAYED_OPTIONS) {
+                el.style.display = 'none'; // Hide items that don't match the input or exceed maximum displayed options
+            } else {
+                el.style.display = 'block'; // Show items that match the input
+                displayedCount++;
+            }
+        });
+    });
 
-	// Hide all dropdown items when the input is cleared
-	searchInputDropdown.addEventListener('blur', () => {
-		if (searchInputDropdown.value === '') {
-			dropdownOptions.forEach((el) => {
-				el.style.display = 'none';
-			});
-		}
-	});
+    // Hide all dropdown items when the input is cleared
+    searchInputDropdown.addEventListener('blur', () => {
+        if (searchInputDropdown.value === '') {
+            dropdownOptions.forEach((el) => {
+                el.style.display = 'none';
+            });
+        }
+    });
 
-	// Clear input field when dropdown is closed
-	dropdownToggle.addEventListener('hidden.bs.dropdown', () => {
-		searchInputDropdown.value = ''; // Clear the input field
-	});
-	</script>
+    // Clear input field when dropdown is closed
+    dropdownToggle.addEventListener('hidden.bs.dropdown', () => {
+        searchInputDropdown.value = ''; // Clear the input field
+    });
+</script>
 
 	<!-- jquery -->
 	<script src="{% static 'Web/assets/js/jquery-1.11.3.min.js' %}"></script>
