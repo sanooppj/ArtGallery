@@ -1,0 +1,236 @@
+{% extends 'profile_page.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+@media (min-width: 1200px) {
+  .product-image img {
+height: 100px !important;
+  }
+}
+        /* for previous and next buttons */
+.custom-pagination a {
+  color: #6f6f6f;
+  font-size: 15px;
+  background-color: #f3f3f3;
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 5px;
+  margin: 3px;
+  font-weight: 600;
+  border-radius: 50px;
+  }
+  .custom-pagination a.prev, .custom-pagination a.next {
+   color: #6f6f6f;
+  font-size: 15px;
+  background-color: #f3f3f3;
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 5px;
+  margin: 3px;
+  font-weight: 600;
+  border-radius: 50px;
+     }
+
+  .custom-pagination a.active, .custom-pagination a:hover {
+  background-color: #F28123;
+    color: #fff;
+    border-color:#F28123;
+ }
+
+ .custom-pagination .prev.disabled,
+.custom-pagination .next.disabled {
+ color: #6f6f6f;
+  font-size: 15px;
+  background-color: #f3f3f3;
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 5px;
+  margin: 3px;
+  font-weight: 600;
+  border-radius: 50px;
+}
+
+.orange-text{
+   color:orange;
+   }
+
+
+
+        .truncate-text {
+    display: inline-block; /* Ensure the text takes up only necessary width */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 16ch; /* Adjust this value according to your requirement */
+}
+
+
+/* Custom styles for the modal */
+  #deleteModal .modal-dialog {
+    max-width: 480px; /* Set the max-width */
+    margin: 100px auto 0; /* Center the modal horizontally and set distance from top to 100px */
+  }
+
+  #deleteModal .modal-content {
+    height: 200px; /* Set the height */
+    background-color: white;
+    border-radius: 10px; /* Add border radius of 10px */
+    padding: 20px 20px 0; /* Adjusted padding without bottom padding */
+}
+
+        #deleteModal .modal-footer button {
+    margin-top: 30px; /* Adjust this value as needed */
+}
+
+
+    </style>
+</head>
+<body>
+<div class="col-lg-8">
+            <div class="card z-depth-3">
+            <div class="card-body">
+            <ul class="nav nav-pills nav-pills-primary nav-justified">
+
+            </ul>
+            <div class="tab-content p-3">
+                	<!-- product section -->
+
+					<div >
+                      <h3 class="p-2" style="border-bottom: 2px solid orange;">Your Wishlist</h3><br><br>
+                        <div class="wow fadeInUp" data-wow-delay="0.1s">
+                            <h4 class="text-center mb-5">{{ total_paintings }} Paintings Listed</h4>
+                        </div>
+                    </div>
+
+
+
+                	<div id="contentpages">
+
+			<div class="row">
+				 {% if paintings %}
+                 {% for i in paintings %}
+
+        <div class="col-md-4 col-lg-4 text-center"> <!-- Change col-lg-3 to col-lg-4 -->
+            <form method="POST" action="{% url 'delete_wishlist' %}">
+                {% csrf_token %}
+					<div class="single-product-item"  style="border: 2px solid rgb(239, 237, 237);">
+						<div class="product-image">
+							<img src="{{i.product.picture.url}}" style=" object-fit: cover;" alt="">
+						</div>
+                                <div class="text-container">
+                                    <h6 class="truncate-text">{{ i.product.pname }}</h6>
+                                </div>						<p class="product-price"><span></span> Rs. {{i.product.price}}/-  </p>
+                       	<a href="{% url 'Single_page' p_id=i.product.id %}" class="cart-btn px-3" style="padding:4px;font-size: 11px !important;border-radius:4px;">View</a>
+                        &nbsp;
+                    <input type="hidden" name="painting_id" value="{{ i.id }}">
+    <button type="button" class="btn btn-danger" style="font-size: 11px !important;" data-toggle="modal" data-target="#deleteModal">Remove</button>
+
+ <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+              					<i class="fas fa-exclamation-circle" style="margin-top:2px;margin-right:-10px !important;font-size:20px !important"></i>
+            <h5 class="modal-title" id="deleteModalLabel">Are you sure you want to remove this painting?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary" style="font-size: 13px !important;" id="confirmDeleted">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+                    </div>
+</form>
+                    </div>
+
+            {% endfor %}
+
+				{% else %}
+    <p class="text-center">No  Paintings found.</p>
+
+				{% endif %}
+
+
+
+
+
+			</div>
+          {% if paintings %}
+    <div class="row pagination-wrap mt-5 wow fadeIn" data-wow-delay="0.5s">
+        <div class="col-md-5 text-center text-md-left mb-4 mb-md-0 ml-md-5">
+            <span>Showing {{ paintings.start_index }}-{{ paintings.end_index }} of {{ total_paintings }} paintings</span>
+        </div>
+        <div class="col-md-6 text-center text-md-right">
+            <div class=" custom-pagination ml-auto">
+                {% if paintings.has_previous %}
+                    <a href="?page={{ paintings.previous_page_number }}" class="prev">Prev</a>
+                {% else %}
+                    <span class="prev disabled">Prev</span>
+                {% endif %}
+
+                {% for num in paintings.paginator.page_range %}
+                    {% if num == paintings.number %}
+                        <!-- Display the current page number with 'active' class -->
+                        <a href="#" class="active">{{ num }}</a>
+                    {% elif num >= paintings.number|add:"-2" and num <= paintings.number|add:"2" %}
+                        <!-- Display the five adjacent pages before and after the current page -->
+                        <a href="?page={{ num }}">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if paintings.has_next %}
+                    <a href="?page={{ paintings.next_page_number }}" class="next">Next</a>
+                {% else %}
+                    <span class="next disabled">Next</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+	</div>
+	<!-- end product section -->
+
+            </div>
+
+            </div>
+            </div>
+            </div>
+
+<script>
+    // JavaScript function to handle AJAX request
+    function loadPage(url) {
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function(response) {
+                var content = $(response).find('#contentpages').html();
+                $('#contentpages').html(content);
+
+                // Update pagination links
+                var pagination = $(response).find('.custom-pagination').html();
+                $('.custom-pagination').html(pagination);
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX Error:", error);
+            }
+        });
+    }
+
+    // Attach event listener to pagination links
+    $(document).on('click', '.custom-pagination a', function(event) {
+        event.preventDefault();
+        var url = $(this).attr('href');
+        loadPage(url);
+    });
+</script>
+
+</body>
+</html>
+{%endblock%}

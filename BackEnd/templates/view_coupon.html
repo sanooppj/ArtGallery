@@ -1,0 +1,289 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        th, td {
+            text-align: center;
+            border: 1px solid #555;
+
+        }
+        .activate-button {
+        display: none;
+        }
+
+        th {
+            background-color: rgb(211, 211, 229);
+        }
+
+        .description-cell {
+            max-width: 150px;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .description-line {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .description-content {
+            display: none;
+            white-space: pre-line;
+            overflow: hidden;
+        }
+
+        .expand-button,
+        .collapse-button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 5px;
+            cursor: pointer;
+            color: blue;
+        }
+
+        .collapse-button {
+            display: none;
+        }
+
+        .action-container {
+            max-width:55px;
+        }
+
+        /* Add the following CSS for the specified columns */
+        .max-width-category {
+            max-width: 100px; /* Adjust the max-width as needed */
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis; /* Add ellipsis for overflow text */
+        }
+
+        .max-width-item {
+            max-width: 70px; /* Adjust the max-width as needed */
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis; /* Add ellipsis for overflow text */
+        }
+
+        .max-width-availability {
+            max-width: 80px; /* Adjust the max-width as needed */
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis; /* Add ellipsis for overflow text */
+        }
+        
+    </style>
+</head>
+<body>
+
+<div class="col-lg-16 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h3 style="color: blue; margin-bottom: 20px; margin-top: -20px;">User query details</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th class="max-width-category">Coupon Code</th>
+                        <th class="max-width-item">Discount</th>
+                        <th>Minimum Value</th>
+                        <th>Valid From</th>
+                        <th>Valid To</th>
+                        <th>Status</th>
+                        <th colspan="2">Actions</th>
+                      </tr>
+                </thead>
+                {% for i in data %}
+                <tbody>
+                    <tr>
+                        <td><input type="radio" name="selected_coupon" value="{{ i.id }}"></td>
+                        <td class="max-width-category">{{ i.code }}</td>
+                        <td>{{ i.discount_percentage }}%</td>
+                        <td>{{ i.minimum_price }}</td>
+                        <td>{{ i.valid_from }}</td>
+                        <td>{{ i.valid_to }}</td>
+                        {% if i.status %}
+                            <td style="color: green;">Active</td>
+                        {% else %}
+                            <td style="color: red;">Inactive</td>
+                        {% endif %}
+
+                        <td class="action-container">
+                            <a href="{% url 'edit_coupon' c_id=i.id %}">
+                                <img src="{% static 'admin2/edit.png' %}" alt="Edit Icon" style="width: 20px; height: 20px;">
+                            </a></td>
+                        <td class="action-container" >
+                            <a href="{% url 'delete_coupon' c_id=i.id %}">
+                                <img src="{% static 'admin2/delete.png' %}" style="margin-left:-10px;" alt="delete Icon" style="width: 35px; height: 35px;">
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+                
+                {% endfor %}
+                
+            </table>
+            <button type="button" class="btn btn-success mt-5 activate-button" style="margin-bottom: 30px !important;" onclick="activateSelectedCoupon()">Activate</button>
+            <button type="button" class="btn btn-success mt-5 deactivate-button" style="margin-bottom: 30px !important;" onclick="deactivateSelectedCoupon()">De-Activate</button>
+
+            
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{% if messages %}
+    {% for i in messages %}
+          {% if i.tags == 'warning' %}
+                 <script>
+                     swal('{{i}}','','warning')
+                 </script>
+{% elif i.tags == 'error' %}
+                  <script>
+                     swal('{{i}}','','error')
+                 </script>
+{% elif i.tags == 'success' %}
+                   <script>
+                     swal('{{i}}','','success')
+                 </script>
+{% else %}
+                <script>
+                     swal('{{i}}','','info')
+                </script>
+{%endif%}
+{%endfor%}
+{%endif%}
+
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<!-- Include jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    function checkCouponStatus() {
+        var selectedCouponId = $("input[name='selected_coupon']:checked").val();
+        if (!selectedCouponId) {
+            // If no coupon is selected, hide both buttons
+            $(".activate-button, .deactivate-button").hide();
+            return;
+        }
+        // Make an AJAX request to check the status of the selected coupon
+        $.ajax({
+            url: "{% url 'check_coupon_status' %}",
+            method: "POST",
+            data: {
+                csrfmiddlewaretoken: "{{ csrf_token }}",
+                coupon_id: selectedCouponId
+            },
+            success: function(response) {
+                if (response.active) {
+                    // If the coupon is active, show the deactivate button and hide the activate button
+                    $(".activate-button").hide();
+                    $(".deactivate-button").show();
+                } else {
+                    // If the coupon is inactive, show the activate button and hide the deactivate button
+                    $(".activate-button").show();
+                    $(".deactivate-button").hide();
+                }
+            },
+            error: function(xhr, status, error) {
+                // Handle error
+                console.log("An error occurred while checking coupon status");
+            }
+        });
+    }
+
+    // Call the function initially to set the initial visibility of the buttons
+    checkCouponStatus();
+
+    // Function to activate the selected coupon
+    function activateSelectedCoupon() {
+        console.log("Button clicked");
+        // Get the ID of the selected coupon
+        var selectedCouponId = $("input[name='selected_coupon']:checked").val();
+
+        // Check if a coupon is selected
+        if (!selectedCouponId) {
+            swal("Error", "Please select a coupon to activate", "error");
+            return;
+        }
+
+        // Make an AJAX request to activate the selected coupon
+        $.ajax({
+            url: "{% url 'activate_coupon' %}",
+            method: "POST",
+            data: {
+                csrfmiddlewaretoken: "{{ csrf_token }}",
+                coupon_id: selectedCouponId
+            },
+            success: function(response) {
+                if (response.success) {
+                    // Display success message using SweetAlert
+                    swal("Success", response.message, "success").then(() => {
+                        // Reload the page after success
+                        location.reload();
+                    });
+                } else {
+                    swal("Error", response.message, "error");
+                }
+            },
+            error: function(xhr, status, error) {
+                // Handle error
+                swal("Error", "An error occurred while activating the coupon", "error");
+            }
+        });
+    }
+
+    // Function to deactivate the selected coupon
+    function deactivateSelectedCoupon() {
+        console.log("Deactivate Button clicked");
+
+        // Make an AJAX request to deactivate the active coupon
+        $.ajax({
+            url: "{% url 'deactivate_coupon' %}",
+            method: "POST",
+            data: {
+                csrfmiddlewaretoken: "{{ csrf_token }}"
+            },
+            success: function(response) {
+                if (response.success) {
+                    // Display success message using SweetAlert
+                    swal("Success", response.message, "success").then(() => {
+                        // Reload the page after success
+                        location.reload();
+                    });
+                } else {
+                    swal("Error", response.message, "error");
+                }
+            },
+            error: function(xhr, status, error) {
+                // Handle error
+                swal("Error", "An error occurred while deactivating the active coupon", "error");
+            }
+        });
+    }
+
+    // Bind change event to radio button
+    $("input[name='selected_coupon']").change(function() {
+        if ($(this).is(":checked")) {
+            checkCouponStatus();
+        }
+    });
+
+    // Bind click event to activate button
+    $(".activate-button").on("click", activateSelectedCoupon);
+
+    // Bind click event to deactivate button
+    $(".deactivate-button").on("click", deactivateSelectedCoupon);
+</script>
+
+</body>
+</html>
+{% endblock %}

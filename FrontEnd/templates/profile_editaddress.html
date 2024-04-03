@@ -1,0 +1,119 @@
+{% extends 'profile_page.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+
+    </style>
+</head>
+<body>
+<div class="col-lg-8">
+            <div class="card z-depth-3">
+            <div class="card-body">
+            <ul class="nav nav-pills nav-pills-primary nav-justified">
+
+            </ul>
+            <div class="tab-content p-3">
+<section class="section-content">
+
+
+    <article class="card">
+                <br/>
+    <h3>&nbsp;&nbsp;Add New Address</h3>
+                <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form class="row contact_form" action="{% url 'update_address' a_id=address.id %}" method="POST">
+                                {%csrf_token%}
+                                <div class="col-md-6 form-group p_star">
+                                    <label>First Name</label>
+                                    <input type="hidden" class="form-control" id="first"  name="Username" value="{{request.session.Username}}"  />
+                                    <input type="text" class="form-control" id="first"  name="firstname" value="{{address.firstname}}" placeholder="First Name"required />
+                                </div>
+                                <div class="col-md-6 form-group p_star">
+                                    <label>Last Name</label>
+                                    <input type="text" class="form-control" id="last"  name="lastname" value="{{address.lastname}}" placeholder="Last Name" required/>
+                                </div>
+                                <div class="col-md-6 form-group p_star">
+                                    <label>Phone Number</label>
+                                    <input type="text" class="form-control" id="phone"  name="phone" value="{{address.phone}}"  placeholder="Phone Number"required  pattern="[0-9]+" title="Please enter only digits" maxlength="10"/>
+                                </div>
+                                <div class="col-md-6 form-group p_star">
+                                    <label>Email</label>
+                                    <input type="email" class="form-control" id="email" value="{{address.email}}"  name="email"placeholder="Email" required/>
+                                </div>
+                                <div class="col-md-6 form-group p_star">
+                                    <label>Address</label>
+                                    <input type="text" class="form-control" id="add1" value="{{address.address_line_1}}"  name="address_line_1" placeholder="Address"required/>
+                                </div>
+                                <div class="col-md-6 form-group p_star">
+                                    <label>Landmark</label>
+                                    <input type="text" class="form-control" id="add1" value="{{address.address_line_2}}"  name="address_line_2" placeholder="Landmark"required/>
+                                </div>
+
+                                <div class="col-md-6 form-group p_star">
+                                    <label>City</label><br>
+                                    <select class="form-select" id="id_city" name="city" required><br>
+                                        <option>{{address.city}}</option>
+                                        <option>Kochi</option>
+                                        <option>Kozhikode</option>
+                                        <option>Tvm</option>
+                                        <option>Thrissur</option>
+                                        <option>Kannur</option>
+                                        
+                                    </select><br>
+                                </div>
+                                <div class="col-md-6 form-group p_star">
+                                    <label>State</label><br>
+                                    <select class="form-select" id="id_state" name="state" required><br>
+                                        <option>{{address.state}}</option>
+                                        <option>Kerala</option>
+                                        <option>Karnataka</option>
+                                        <option>Tamilnadu</option>
+                                        <option>Delhi</option>
+                                        <option>Maharashtra</option>
+                                    </select><br>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>Pin Code</label>
+                                    <input type="text" class="form-control" id="pincode" name="pincode" value="{{address.pincode}}"  placeholder="Pincode" required pattern="[0-9]+" title="Please enter only digits" maxlength="6"/>
+                                </div>
+                                <div class="form-group">
+                                    <input type="checkbox" name="default" {% if address.default %} checked {% endif %} value="true">Set as default
+                                </div>
+                            
+
+
+                                <br/><br/>
+                                <div class="col-sm-12 form-group p_star">
+                                    <center>
+           <input type="submit" class="cart-btn px-4 "  style="text-transform:none;font-weight:normal;color:white;margin-left:20px;padding:7px;font-size:14px; border-radius:10px !important;" value="Save Changes">
+                                    </center>
+                                </div>
+                            </form>
+                        </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </article>
+
+        </main>
+        </div>
+        </div>
+    </section>
+            </div>
+            </div>
+            </div>
+
+
+
+            </div>
+
+</body>
+</html>
+{%endblock%}

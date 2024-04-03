@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+{% extends 'index.html' %}
+{% load static %}
+
+{% block content %}
+     <!-- Add filter form for selecting time range -->
+            <form id="filter-form"  method="GET" action="">
+                                    <label for="valid_to" class="mr-2">Select a date</label><!-- Added margin-right for spacing -->
+
+                <div class="form-group d-flex align-items-end"> <!-- Using Bootstrap flexbox classes -->
+                    <input type="datetime-local" id="valid_to" class="form-control mr-2" style="max-width: 200px;margin-bottom:-5px;" name="valid_to" placeholder="Enter the due date">
+                    <button type="submit" class="btn btn-primary" >Filter</button>
+                </div>
+            </form>
+
+
+                    <div class="col-lg-16 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 style="color: blue; margin-bottom: 20px; margin-top: -20px;">User order details</h3>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="max-width-category">Username</th>
+                                        <th class="max-width-item">Order status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for user in users %}
+                                    <tr>
+                                        <td class="max-width-category">{{ user.Username }}</td>
+                                        <td class="action-container">
+                                            <a href="{% url 'order_details' user.Username %}">
+                                                <button class="btn btn-success">Clik here</button>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+{% endblock %}

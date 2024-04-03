@@ -1,0 +1,288 @@
+{% extends 'About.html' %}
+{% load static %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body><!-- Your existing navigation bar code -->
+<nav class="main-menu" >
+  <ul>
+    <li><a href="{% url 'Home_page' %}">Home</a></li>
+    <li class=""><a href="{% url 'About_page' %}">About</a></li>
+    <li><a href="#">Pages</a>
+      <ul class="sub-menu">
+        <li><a href="{% url 'user_painting' %}">Upload paintings</a></li>
+        <li><a href="{% url 'search_painting' %}">Search a painting</a></li>
+		          <li><a href="{% url 'learn_art' %}">classes for art</a></li>
+
+      </ul>
+    </li>
+    <li><a href="{% url 'Contact_page' %}">Contact</a></li>
+    <li><a href="{% url 'Shop' %}">Shop</a></li>
+								   <li>
+									{% for i in user_profile %}
+										<img src="{{ i.profile_image.url }}" style="margin-left:100px;border:2px solid #F28123;object-fit:cover;"
+											 alt="" name="image" class="rounded-circle" height="35px" width="35px">
+									{% empty %}
+										{% if request.session.Username %}
+											<!-- Show default image if user_profile is empty -->
+											<img src="{% static 'Web/assets/img/usericon11.png' %}" style="margin-left:100px;border:2px solid #F28123;display:cover;"
+												 alt="Default Image" name="image" class="rounded-circle" height="35px" width="35px">
+										{% endif %}
+									{% endfor %}
+									{% if request.session.Username %}
+										<span class="userspan">{{request.session.Username}}</span>
+										<i class="bi bi-chevron-down " style="color:#fff;font-weight:bold;margin-left:-10px;"></i>
+										<ul class="sub-menu"  style="margin-left:100px;">
+											<li><a href="{% url 'profile_page' %}">My account</a></li>
+        <li><a href="#" data-toggle="modal" data-target="#logoutModal">Logout</a></li>
+										</ul>
+									{% else %}
+
+								<li>
+											<a href="{% url 'Login_page'%}" class="nav-link">
+												<i class="bi bi-person-plus" style="font-size: 20px;margin-left:30px;"></i>
+											</a>
+										</li>
+									{% endif %}
+								</li>
+    <li>
+      <div class="header-icons">
+        <a class="wishlist-icon" href="{% url 'wishlist' %}"><i class="far fa-heart"></i></a>
+        <a class="shopping-cart" href="{% url 'Cart_page' %}"><i class="fas fa-shopping-cart"></i></a>
+<a class="dropdown-toggle hidden-arrow " style="border: none; " href="#" id="navbarDropdownMenuLink" role="button" data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
+			<i class="fas fa-search"></i> <!-- Search icon -->
+		</a>
+		<ul class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdownMenuLink" style="background-color: rgb(180, 180, 180)" >
+			<li>
+				<div class="input-group mt-2 mx-2" >
+					<div class="form-outline w-auto" data-mdb-input-init >
+						<input type="search" id="search-input-dropdown" class="form-control" style="width: 280px;" />
+						<label class="form-label" for="search-input-dropdown" style="width: 200px;">Search</label>
+					</div>
+				</div>
+			</li>
+			{% for painting in paintings %}
+			<li class="dropdown-item" style=" display: none;"  data-name="{{ painting.pname }}"><a href="{% url 'Single_page' painting.id %}">{{ painting.pname }}</a></li>
+			{% endfor %}
+		</ul>
+      </div>
+    </li>
+  </ul>
+</nav>
+						<a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
+												<div class="mobile-menu"></div>
+
+						<!-- menu end -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end header -->
+
+
+<!-- search area -->
+	<div class="search-area">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<span class="close-btn"><i class="fas fa-window-close"></i></span>
+					<div class="search-bar">
+						<div class="search-bar-tablecell">
+							<form action="{% url 'search' %}" method="get">
+							<h3>Search For:</h3>
+							<input id="query" name="query" type="text" placeholder="Keywords">
+							<button type="submit">Search <i class="fas fa-search"></i></button>
+								</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end search area -->
+
+<!-- Logout Modal -->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                  <h5 class="modal-title" id="logoutModalLabel">
+                    <div style="display: flex; align-items: center;">
+					<i class="fas fa-exclamation-circle" style="margin-right: 6px;margin-top:-2px;"></i>
+                        <div>Are you sure you want to logout ?</div>
+                    </div>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+           <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" style="margin-top:40px !important;" data-dismiss="modal">Cancel</button>
+				&nbsp;
+                <a href="{% url 'user_logout' %}" class="btn btn-primary" style="margin-top:40px !important;">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+	<!-- breadcrumb-section -->
+	<div class="breadcrumb-section breadcrumb-bg" style="height:250px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 offset-lg-2 text-center">
+					<div class="breadcrumb-text">
+						<p>Discover Inspiring Creations</p>
+						<h1>Art learning section</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end breadcrumb section -->
+<div class="text-center m-5">
+    {% if not  subscribed %}
+    <form id="subscribe-form" method="post" action="{% url 'learn_art_save' %}">
+        <h3>Subscribe here to access the contents.</h3>
+        <input type="hidden" name="username" value="{{ request.user.username }}">
+        <input type="hidden" name="amount" value="500">
+
+        <script
+            src="https://checkout.razorpay.com/v1/checkout.js"
+            data-key="rzp_test_IzIBFTmzd3zzKk"
+            data-amount="50000"
+            data-currency="INR"
+            data-order_id="{{ order_id }}"
+            data-name="Art Gallery"
+            data-buttontext="Subscribe"
+            data-description="A Wild Sheep Chase is the third novel by Japanese author Haruki Murakami"
+            data-image="https://example.com/your_logo.jpg"
+            data-prefill.name="{{ request.user.get_full_name }}"
+            data-prefill.email="{{ request.user.email }}"
+            data-theme.color="blue"
+            data-payment-methods="card,upi,emi,netbanking,wallet">
+        </script>
+    </form>
+
+    {% endif %}
+</div>
+
+
+
+<!-- latest news -->
+	<div class="latest-news pt-150 pb-150">
+		<div class="container">
+
+			<div class="row">
+				<div class="col-lg-8 offset-lg-2 text-center">
+					<div class="section-title">
+						<h3><span class="orange-text">Discover</span>  Painting Styles"</h3>
+						<p>Step into the world of art with our varied painting methods. From watercolors to digital art, explore each style and unleash your creativity.</p>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="row">
+				<div class="col-lg-4 col-md-6">
+					<div class="single-latest-news">
+						<a href="single-news.html"><div class="latest-news-bg news-bg-1">
+
+						</div>
+                        </a>
+						<div class="news-text-box text-center">
+							<h3><a href="single-news.html">Water Colour Painting</a></h3>
+							<p class="blog-meta">
+								<span class="author"><i class="fas fa-user"></i> Admin</span>
+								<span class="date"><i class="fas fa-calendar"></i> 10 march, 2024</span>
+							</p>
+							<a href="{% url 'watercolour_painting' %}" class="cart-btn" style="color:white;">clik here</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-6">
+					<div class="single-latest-news">
+						<a href="single-news.html"><div class="latest-news-bg news-bg-2">
+
+						</div>
+                        </a>
+						<div class="news-text-box text-center">
+							<h3><a href="single-news.html">Digital Painting</a></h3>
+							<p class="blog-meta">
+								<span class="author"><i class="fas fa-user"></i> Admin</span>
+								<span class="date"><i class="fas fa-calendar"></i> 10 march, 2024</span>
+							</p>
+							<a href="{% url 'digital_painting' %}" class="cart-btn" style="color:white;">clik here</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-6 offset-md-3 offset-lg-0">
+					<div class="single-latest-news">
+						<a href="single-news.html"><div class="latest-news-bg news-bg-3"></div></a>
+						<div class="news-text-box text-center">
+							<h3><a href="single-news.html">Oil Painting</a></h3>
+							<p class="blog-meta">
+								<span class="author"><i class="fas fa-user"></i> Admin</span>
+								<span class="date"><i class="fas fa-calendar"></i> 10 march, 2024</span>
+							</p>
+							<a href="{% url 'oil_painting' %}" class="cart-btn">clik here</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-6">
+					<div class="single-latest-news">
+						<a href="single-news.html"><div class="latest-news-bg news-bg-4">
+
+						</div>
+                        </a>
+						<div class="news-text-box text-center">
+							<h3><a href="single-news.html">Acrylic Painting</a></h3>
+							<p class="blog-meta">
+								<span class="author"><i class="fas fa-user"></i> Admin</span>
+								<span class="date"><i class="fas fa-calendar"></i> 10 march, 2024</span>
+							</p>
+							<a href="{% url 'acrylic_painting' %}" class="cart-btn" style="color:white;">clik here</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-6">
+					<div class="single-latest-news">
+						<a href="single-news.html"><div class="latest-news-bg news-bg-5">
+
+						</div>
+                        </a>
+						<div class="news-text-box text-center">
+							<h3><a href="single-news.html">Encaustic Painting</a></h3>
+							<p class="blog-meta">
+								<span class="author"><i class="fas fa-user"></i> Admin</span>
+								<span class="date"><i class="fas fa-calendar"></i> 10 march, 2024</span>
+							</p>
+							<a href="{% url 'encastic_painting' %}" class="cart-btn" style="color:white;">clik here</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-6 offset-md-3 offset-lg-0">
+					<div class="single-latest-news">
+						<a href="single-news.html"><div class="latest-news-bg news-bg-6"></div></a>
+						<div class="news-text-box text-center">
+							<h3><a href="single-news.html">MixedMedia Painting</a></h3>
+							<p class="blog-meta">
+								<span class="author"><i class="fas fa-user"></i> Admin</span>
+								<span class="date"><i class="fas fa-calendar"></i> 10 march, 2024</span>
+							</p>
+							<a href="{% url 'mixedmedia_painting' %}" class="cart-btn">clik here</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<!-- end latest news -->
+
+</body>
+</html>
+{%endblock%}

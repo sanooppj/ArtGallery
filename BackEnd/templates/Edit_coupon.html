@@ -1,0 +1,56 @@
+{% extends 'index.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+<form method="POST" action="{% url 'update_coupon' c_id=data.id %}" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="col-md-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h3 style="color: blue; margin-bottom:20px;" class="card-title">Coupon Information</h3>
+
+                <div class="form-group">
+                    <label for=""> Coupon Code</label>
+                    <input type="text" class="form-control" name="code" value="{{data.code}}" placeholder="Enter coupon code">
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="">Discount %</label>
+                    <input type="number" class="form-control" name="discount" value="{{data.discount_percentage}}" placeholder="Enter the discount percentage">
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="">Minimum value</label>
+                    <input type="number" class="form-control" name="min_price" value="{{data.minimum_price}}" placeholder="Enter the minuimum value">
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="">Valid from</label>
+                    <input type="datetime-local" class="form-control" name="valid_from" value="{{ data.valid_from|date:'Y-m-d\TH:i' }}" readonly>
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="">Valid to</label>
+                    <input type="datetime-local" class="form-control" name="valid_to" value="{{ data.valid_to|date:'Y-m-d\TH:i' }}" placeholder="Enter the due date">
+                </div>
+                <br>
+
+                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                <button class="btn btn-light">Cancel</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+</body>
+
+
+
+</html>
+{% endblock %}

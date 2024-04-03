@@ -1,0 +1,179 @@
+{% extends 'profile_page.html' %}
+{% load static %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #removeImageButton {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="col-lg-8">
+            <div class="card z-depth-3">
+            <div class="card-body">
+            <ul class="nav nav-pills nav-pills-primary nav-justified">
+
+            </ul>
+            <div class="tab-content p-3">
+  <div class="tab-pane active show" id="edit">
+                      <h3 class="p-2" style="border-bottom: 2px solid orange;">Edit profile</h3><br><br>
+
+
+
+
+
+
+            <form method="post" action="{% url 'update_profile' p_id=profile.id  %}" enctype="multipart/form-data">
+                {%csrf_token%}
+                <div>
+    <div class="d-flex justify-content-center mb-4">
+        <img id="selectedAvatar" src="{{profile.profile_image.url}}"
+        class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover;" alt="example placeholder" />
+    </div>
+    <div class="d-flex justify-content-center">
+        <div class="btn btn-primary btn-rounded">
+            <label class="form-label text-white m-1" for="customFile2">Choose file</label>
+            <input type="file" class="form-control d-none" name="image" id="customFile2" onchange="displaySelectedImage(event, 'selectedAvatar')" />
+
+        </div>&nbsp;&nbsp;&nbsp;
+        <input type="button" class="btn btn-danger" id="removeImageButton"  value="Remove" onclick="removeImage()">
+        <input type="hidden" name="image_removed" id="imageRemoved" value="False">
+
+    </div>
+</div><br>
+    <div class="form-group row mb-2">
+        <label class="col-lg-3 col-form-label form-control-label">Username</label>
+        <div class="col-lg-9">
+            <input class="form-control" type="text" name="new_username" value="{{request.session.Username}}" >
+            <input class="form-control" type="hidden" name="Username" value="{{request.session.Username}}">
+
+        </div>
+        </div>
+        <div class="form-group row mb-2">
+            <label class="col-lg-3 col-form-label form-control-label">Email</label>
+            <div class="col-lg-9">
+                <input class="form-control" type="email" name="new_email" value="{{request.session.Email}}" >
+                <input class="form-control" type="hidden" name="Email" value="{{request.session.Email}}">
+
+
+            </div>
+            </div>
+            <div class="form-group row mb-2">
+            <label class="col-lg-3 col-form-label form-control-label">Name</label>
+            <div class="col-lg-9">
+               <input class="form-control" type="text" name="name" value="{{ profile.name|default:'' }}" placeholder="Enter Full Name" >
+
+
+            </div>
+            </div>
+            <div class="form-group row mb-2">
+            <label class="col-lg-3 col-form-label form-control-label">Age</label>
+            <div class="col-lg-9">
+       <input class="form-control" type="tel" name="age" value="{{ profile.age|default:'' }}" placeholder="Enter Age">
+            </div>
+            </div>
+            <div class="form-group row mb-2">
+            <label class="col-lg-3 col-form-label form-control-label">Mobile number</label>
+            <div class="col-lg-9">
+<input class="form-control" type="tel" value="{{ profile.mobile|default:'' }}" name="mobile" placeholder="Enter Mobile Number">
+            </div>
+            </div>
+
+
+
+            <div class="form-group row mb-2">
+            <label class="col-lg-3 col-form-label form-control-label"></label>
+            <div class="col-lg-6">
+            <input class="form-control" type="text" name="state" value="{{ profile.state|default:'' }}" placeholder="State">
+            </div>
+            <div class="col-lg-3">
+            <input class="form-control" type="text" name="city" value="{{ profile.city|default:'' }}" placeholder="City">
+            </div>
+            </div>
+                <div class="form-group row mb-3">
+            <label class="col-lg-3 col-form-label form-control-label">Hobbies</label>
+            <div class="col-lg-9">
+            <input class="form-control" type="text" name="hobby" placeholder="Enter Hobby" value="{{ profile.hobby|default:'' }}">
+            </div>
+            </div><br><br>
+            <div class="form-group row mb-3">
+            <label class="col-lg-3 col-form-label form-control-label"></label>
+            <div class="col-lg-9">
+           <input type="reset" class="btn btn-secondary px-4 " style="margin-left:20px;padding:7px;font-size:14px; border-radius:10px !important;" value="Cancel">
+           <input type="submit" class="cart-btn px-4 "  style="text-transform:none;font-weight:normal;color:white;margin-left:20px;padding:6px;font-size:14px; border-radius:10px !important;" value="Save Changes">
+
+
+
+            </div>
+            </div>
+            </form>
+            </div>
+            </div>
+
+            </div>
+            </div>
+            </div>
+            <script>
+                window.onload = function () {
+                    const existingImageUrl = "{{ profile.profile_image.url }}";
+                    if (existingImageUrl) {
+                        document.getElementById('selectedAvatar').src = existingImageUrl;
+                        // Check if the existing image is the default image
+                        if (existingImageUrl = "{% static 'Web/assets/img/usericon11.png' %}") {
+                            // If it's the default image, hide the remove button
+                            document.getElementById('removeImageButton').style.display = 'none';
+                        } else {
+                            // If it's not the default image, show the remove button
+                            document.getElementById('removeImageButton').style.display = 'inline-block';
+                        }
+                    }
+                };
+
+                function removeImage() {
+                    // Reset the value of the file input field
+                    document.getElementById('customFile2').value = '';
+                    // Reset the selected image
+                    document.getElementById('selectedAvatar').src = "{% static 'Web/assets/img/usericon11.png' %}";
+
+                    // Hide the remove button if the default image is set
+                    document.getElementById('removeImageButton').style.display = 'none';
+
+                    // Set the value of the hidden input to indicate image removal
+                    document.getElementById('imageRemoved').value = 'True';
+                }
+
+                function displaySelectedImage(event, elementId) {
+                    const selectedImage = document.getElementById(elementId);
+                    const fileInput = event.target;
+
+                    if (fileInput.files && fileInput.files[0]) {
+                        const reader = new FileReader();
+
+                        reader.onload = function(e) {
+                            selectedImage.src = e.target.result;
+                            // Show the remove button when a new image is selected
+                            document.getElementById('removeImageButton').style.display = 'inline-block';
+                        };
+
+                        reader.readAsDataURL(fileInput.files[0]);
+                    } else {
+                        // If no file is selected, and the existing image is not the default, show the remove button
+                        const existingImageUrl = "{{ profile.profile_image.url }}";
+                        if (existingImageUrl && existingImageUrl != "{% static 'Web/assets/img/usericon11.png' %}") {
+                            document.getElementById('removeImageButton').style.display = 'inline-block';
+                        } else {
+                            // Otherwise, hide the remove button
+                            document.getElementById('removeImageButton').style.display = 'none';
+                        }
+                    }
+                }
+            </script>
+
+
+</body>
+</html>
+{%endblock%}

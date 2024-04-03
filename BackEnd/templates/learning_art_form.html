@@ -1,0 +1,129 @@
+{% extends 'index.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+
+    </style>
+</head>
+<body>
+<form method="POST" action="{% url 'learning_art_save' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="col-md-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h3 style="color: blue; margin-bottom:20px;" class="card-title">Learning Art Information</h3>
+                	<input type="hidden" placeholder="upload painting" name="username" value="{{request.session.Username}}">
+                 <div class="form-group">
+                    <label for="">Main Picture</label>
+                    <input type="file" class="form-control" name="mainimage" placeholder="Upload main picture">
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="">Main Heading </label>
+                    <input type="text" class="form-control" name="mainheading" placeholder="Enter main heading">
+                </div>
+                <br>
+                  <div class="form-group">
+                    <label for="">Image1</label>
+                    <input type="file" class="form-control" name="image1" placeholder="Upload image1 ">
+                </div>
+                <br>
+
+                <div class="form-group">
+                    <label for="">Subheading1</label>
+                    <input type="text" class="form-control" name="subheading1" placeholder="Enter subheading1">
+                </div><br>
+                <div class="form-group">
+                    <label for="">Link1</label>
+                    <input type="text" class="form-control" name="link1" placeholder="Enter link1">
+                </div><br>
+                <div class="form-group">
+                    <label for="">Description1</label>
+                    <input type="text" class="form-control" name="description1" placeholder="Enter description1">
+                </div><br>
+                <div class="form-group">
+                    <label for="">Image2</label>
+                    <input type="file" class="form-control" name="image2" placeholder="Upload image2 ">
+                </div>
+                <br>
+
+                <div class="form-group">
+                    <label for="">Subheading2</label>
+                    <input type="text" class="form-control" name="subheading2" placeholder="Enter subheading2">
+                </div><br>
+                <div class="form-group">
+                    <label for="">Link2</label>
+                    <input type="text" class="form-control" name="link2" placeholder="Enter link2">
+                </div><br>
+                <div class="form-group">
+                    <label for="">Description2</label>
+                    <input type="text" class="form-control" name="description2" placeholder="Enter description2">
+                </div><br> <div class="form-group">
+                    <label for="">Image3</label>
+                    <input type="file" class="form-control" name="image3" placeholder="Upload image3 ">
+                </div>
+                <br>
+
+                <div class="form-group">
+                    <label for="">Subheading3</label>
+                    <input type="text" class="form-control" name="subheading3" placeholder="Enter subheading3">
+                </div><br>
+                <div class="form-group">
+                    <label for="">Link3</label>
+                    <input type="text" class="form-control" name="link3" placeholder="Enter link3">
+                </div><br>
+                <div class="form-group">
+                    <label for="">Description3</label>
+                    <input type="text" class="form-control" name="description3" placeholder="Enter description3">
+                </div><br>
+                <div class="form-group">
+                    <label for="">Image4</label>
+                    <input type="file" class="form-control" name="image4" placeholder="Upload image4 ">
+                </div>
+                <br>
+
+                <div class="form-group">
+                    <label for="">Subheading4</label>
+                    <input type="text" class="form-control" name="subheading4" placeholder="Enter subheading4">
+                </div><br>
+                <div class="form-group">
+                    <label for="">Link4</label>
+                    <input type="text" class="form-control" name="link4" placeholder="Enter link4">
+                </div><br>
+                <div class="form-group">
+                    <label for="">Description4</label>
+                    <input type="text" class="form-control" name="description4" placeholder="Enter description4">
+                </div><br>
+                <div class="form-group">
+                    <label for="">Image5</label>
+                    <input type="file" class="form-control" name="image5" placeholder="Upload image5 ">
+                </div>
+                <br>
+
+                <div class="form-group">
+                    <label for="">Subheading5</label>
+                    <input type="text" class="form-control" name="subheading5" placeholder="Enter subheading5">
+                </div><br>
+                <div class="form-group">
+                    <label for="">Link5</label>
+                    <input type="text" class="form-control" name="link5" placeholder="Enter link5">
+                </div><br>
+                <div class="form-group">
+                    <label for="">Description5</label>
+                    <input type="text" class="form-control" name="description5" placeholder="Enter description5">
+                </div><br>
+
+                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                <button class="btn btn-light">Cancel</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+</body>
+</html>
+{% endblock %}

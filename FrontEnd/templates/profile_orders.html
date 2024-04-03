@@ -1,0 +1,174 @@
+{% extends 'profile_page.html' %}
+{% load static %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+      /* CSS for scrollbar */
+      .table-container {
+          max-height: 516px ; /* Adjust the height as needed */
+          overflow-y: auto;
+      }
+
+      .fixed-header {
+          position: sticky;
+          top: -10px;
+          z-index: 1;
+          background-color: #fff;
+          margin-bottom: 10px;
+      }
+
+/* Custom styles for the modal */
+  #deleteConfirmationModal .modal-dialog {
+    max-width: 480px; /* Set the max-width */
+    margin: 100px auto 0; /* Center the modal horizontally and set distance from top to 100px */
+  }
+
+    #deleteConfirmationModal .modal-content {
+    height: 180px; /* Set the height */
+    background-color: white;
+    border:1px double #fd7e14;
+    border-radius: 10px; /* Add border radius of 10px */
+    padding: 20px 20px 0; /* Adjusted padding without bottom padding */
+}
+
+
+  </style>
+</head>
+<body>
+  <div class="col-lg-8">
+      <div class="card z-depth-3">
+          <div class="card-body">
+              <ul class="nav nav-pills nav-pills-primary nav-justified">
+              </ul>
+              <div class="tab-content p-3">
+                  <h3 class="p-2" style="border-bottom: 2px solid orange;">My Orders</h3><br><br>
+                  <form id="deleteOrdersForm" method="POST">
+                      {% csrf_token %}
+                      <button type="button" class="btn btn-danger mt-5 delete-button" style="margin-bottom: 30px;margin-top: -20px !important;" onclick="deleteSelectedOrders()">Delete</button>
+
+                      <div class="table-container">
+                          <table class="table table-hover">
+                              <thead class="fixed-header">
+                                  <tr>
+                                      <th></th>
+                                      <th scope="col" style="color:rgb(3, 3, 110);">Order Id</th>
+                                      <th scope="col" style="color:rgb(3, 3, 110);">Total Amount</th>
+                                      <th scope="col"style="color:rgb(3, 3, 110);">Order Status</th>
+                                      <th scope="col" style="color:rgb(3, 3, 110);">Ordered On</th>
+                                      <th scope="col" style="color:rgb(3, 3, 110);">View more</th>
+                                      <th scope="col" colspan="2" style="color:rgb(3, 3, 110);">Action</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  {% for i in orders %}
+                                  <tr>
+                                      <td><input type="checkbox" name="selected_orders[]" value="{{ i.id }}"></td>
+                                      <th scope="row">{{ i.order_id }}</th>
+                                      <td>{{ i.grand_total }}</td>
+                                      {% if i.order_status != 'Order Cancelled' %}
+                                      <td class="text-success">{{ i.order_status }}</td>
+                                      {% else %}
+                                      <td class="text-danger">{{ i.order_status }}</td>
+                                      {% endif %}
+                                      <td>{{ i.created_at }}</td>
+                                      <td><a href="{% url 'order_confirmed' order_id=i.order_id %}"><i class='fas fa-file-pdf' style='font-size:28px;color:red'></i></a></td>
+                                      <td><a href="{% url 'order_view' order_id=i.id %}" class="btn btn-success btn-sm">view</a></td>
+                                  </tr>
+                                  {% endfor %}
+                              </tbody>
+                          </table>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+  </body>
+<script>
+  function toggleDeleteButton() {
+      var checkboxes = $('input[name="selected_orders[]"]');
+      var deleteButton = $('.delete-button');
+
+      if (checkboxes.is(":checked")) {
+          deleteButton.show();
+      } else {
+          deleteButton.hide();
+      }
+  }
+
+  function deleteSelectedOrders() {
+      // Display the confirmation modal if needed
+      $('#deleteConfirmationModal').modal('show');
+  }
+
+  function confirmDelete() {
+      var selectedOrders = [];
+      $('input[name="selected_orders[]"]:checked').each(function() {
+          selectedOrders.push($(this).val());
+      });
+
+      // Send AJAX request to delete the selected orders
+      $.ajax({
+          url: '{% url "delete_selected_orders" %}',
+          method: 'POST',
+          data: {
+              selected_orders: selectedOrders,
+              csrfmiddlewaretoken: '{{ csrf_token }}'
+          },
+          success: function(response) {
+              // Handle success response
+              console.log(response);
+
+              // Refresh the page after successful deletion
+              location.reload();
+          },
+          error: function(xhr, errmsg, err) {
+              // Handle error response if needed
+              console.log(errmsg);
+          }
+      });
+  }
+
+  $(document).ready(function() {
+      $('input[name="selected_orders[]"]').change(function() {
+          toggleDeleteButton();
+      });
+
+      // Initially hide the delete button
+      $('.delete-button').hide();
+  });
+</script>
+
+
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmationModalLabel">
+                  <div style="display: flex; align-items: center;">
+        <i class="fas fa-exclamation-circle" style="margin-right: 6px;margin-top:-2px;"></i>
+                      <div>Are you sure you want to delete  ?</div>
+                  </div>
+              </h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" style="margin-top:40px !important;" data-dismiss="modal">Cancel</button>
+      &nbsp;
+              <button type="button" class="btn btn-primary" onclick="confirmDelete()"  style="margin-top:40px !important;">Confirm</button>
+
+          </div>
+      </div>
+  </div>
+</div>
+
+
+</html>
+
+{% endblock %}

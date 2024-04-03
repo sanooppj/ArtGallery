@@ -1,0 +1,193 @@
+{% extends 'profile_page.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        /* CSS for two cards per row */
+        .address-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .address-card {
+            width: 48%; /* Adjust as needed */
+            margin-bottom: 20px;
+        }
+        @media (max-width: 768px) {
+            .address-card {
+                width: 100%;
+            }
+        }
+
+
+
+/* Custom styles for the modal */
+  #deleteConfirmationModal .modal-dialog {
+    max-width: 480px; /* Set the max-width */
+    margin: 100px auto 0; /* Center the modal horizontally and set distance from top to 100px */
+  }
+
+    #deleteConfirmationModal .modal-content {
+    height: 180px; /* Set the height */
+    background-color: white;
+    border:1px double #fd7e14;
+    border-radius: 10px; /* Add border radius of 10px */
+    padding: 20px 20px 0; /* Adjusted padding without bottom padding */
+}
+    </style>
+</head>
+<body>
+<div class="col-lg-8">
+    <div class="card z-depth-3">
+        <div class="card-body">
+            <ul class="nav nav-pills nav-pills-primary nav-justified">
+            </ul>
+            <div class="tab-content p-3">
+                <div class="container">
+                      <h3 class="p-2" style="border-bottom: 2px solid orange;">Saved Address</h3><br><br>
+                    <div class="container">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="address-container">
+                                <!-- Display default addresses first -->
+                                {% for i in address %}
+                                    {% if i.default %}
+                                        <div class="card shadow my-2 address-card">
+                                            <div class="card-body">
+                                                <input type="checkbox" name="selected_addresses" value="{{  i.id }}">
+                                                <div class="container">
+                                                    <p>{{ i.firstname }}  {{ i.lastname }}</p>
+                                                    <p>{{ i.phone }}</p>
+                                                    <p>{{ i.email }}</p>
+                                                    <p>{{ i.address_line_1 }}</p>
+                                                    <p>{{ i.address_line_2 }}</p>
+                                                    <p>{{ i.city }} , {{ i.state }}</p>
+                                                    <p>{{ i.pincode }}</p>
+                                                    <!-- Inside your for loop for displaying addresses -->
+                                                    <a href="{% url 'Edit_address' a_id=i.id %}" class="btn btn-info mt-5">Edit</a>
+                                                    {% if i.default == True %}
+                                                        <a href="" class="btn btn-danger mt-5 mx-2 disabled">Default</a>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                                <!-- Display non-default addresses -->
+                                {% for i in address %}
+                                    {% if not i.default %}
+                                        <div class="card shadow my-2 address-card">
+                                            <div class="card-body">
+                                                <input type="checkbox" name="selected_addresses" value="{{  i.id }}">
+                                                <div class="container">
+                                                    <p>{{ i.firstname }}  {{ i.lastname }}</p>
+                                                    <p>{{ i.phone }}</p>
+                                                    <p>{{ i.email }}</p>
+                                                    <p>{{ i.address_line_1 }}</p>
+                                                    <p>{{ i.address_line_2 }}</p>
+                                                    <p>{{ i.city }} , {{ i.state }}</p>
+                                                    <p>{{ i.pincode }}</p>
+                                                    <!-- Inside your for loop for displaying addresses -->
+                                                    <a href="{% url 'Edit_address' a_id=i.id %}" class="btn btn-info mt-5">Edit</a>
+                                                    {% if i.default == True %}
+                                                        <a href="" class="btn btn-danger mt-5 mx-2 disabled">Default</a>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <a href="{% url 'addaddress' %}" class="btn btn-success mt-5">Add Address</a>
+                            <button type="button" class="btn btn-danger mt-5 delete-button" onclick="deleteSelectedAddresses()">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    function toggleDeleteButton() {
+        var checkboxes = $('input[name="selected_addresses"]');
+        var deleteButton = $('.delete-button');
+
+        if (checkboxes.is(":checked")) {
+            deleteButton.show();
+        } else {
+            deleteButton.hide();
+        }
+    }
+
+    function deleteSelectedAddresses() {
+        // Display the confirmation modal
+        $('#deleteConfirmationModal').modal('show');
+    }
+
+    function confirmDelete() {
+        var selectedAddresses = [];
+        $('input[name="selected_addresses"]:checked').each(function() {
+            selectedAddresses.push($(this).val());
+        });
+
+        // Send AJAX request to delete the selected addresses
+        $.ajax({
+            url: '{% url "delete_selected_addresses" %}',
+            method: 'POST',
+            data: {
+                selected_addresses: selectedAddresses,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function(response) {
+                // Handle success response
+                console.log(response);
+
+                // Refresh the page after successful deletion
+                location.reload();
+            },
+            error: function(xhr, errmsg, err) {
+                // Handle error response if needed
+                console.log(errmsg);
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        $('input[name="selected_addresses"]').change(function() {
+            toggleDeleteButton();
+        });
+
+        // Initially hide the delete button
+        $('.delete-button').hide();
+    });
+</script>
+
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                  <h5 class="modal-title" id="deleteConfirmationModalLabel">
+                    <div style="display: flex; align-items: center;">
+					<i class="fas fa-exclamation-circle" style="margin-right: 6px;margin-top:-2px;"></i>
+                        <div>Are you sure you want to delete  ?</div>
+                    </div>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" style="margin-top:40px !important;" data-dismiss="modal">Cancel</button>
+				&nbsp;
+                                <button type="button" class="btn btn-primary" onclick="confirmDelete()"  style="margin-top:40px !important;">Confirm</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+</html>
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends 'Login_page.html' %}
+{% load static %}
+
+{% block content %}
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>HomeHaven</title>
+
+    <style>
+
+        .alert-container {
+            position: fixed;
+            top: -100px; /* Initially off-screen */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            width: 100%;
+            max-width: 400px; /* Adjust width as needed */
+            text-align: center;
+            animation: slideDown 0.5s forwards;
+        }
+
+        @keyframes slideDown {
+            0% {
+                top: -100px; /* Off-screen */
+            }
+            100% {
+                top: 100px; /* 100px down from top */
+            }
+        }
+
+        .alert {
+            position: relative;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid transparent;
+            border-radius: .25rem;
+        }
+
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+        .alert-warning {
+            color: #856404;
+            background-color: #fff3cd;
+            border-color: #ffeeba;
+        }
+
+        .alert-error {
+            color: #db4227;
+            background-color: #fff3cd;
+            border-color: #ffeeba;
+        }
+    </style>
+</head>
+<body>
+<!-- end search area -->
+<div class="container-login100">
+    <div class="wrap-login100 p-t-55 p-b-95" style="margin-top:-240px;"> <!-- Adjusted padding -->
+        <h3 style="color:white;"> A verfication link is sent to your email</h3>
+
+            <div class="container-login100-form-btn m-t-17">
+                <p>Remember your password ?</p>
+                <a href="{% url 'Login_page' %}" class="font-weight-bold">Login</a>
+            </div>
+    </div>
+</div>
+
+<!-- Alert container for Django messages -->
+<div class="alert-container">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+<!-- JavaScript Libraries -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Hide alerts after 3 seconds
+        setTimeout(function() {
+            $('.alert-container').fadeOut('medium');
+        }, 5000);
+    });
+</script>
+
+
+</body>
+</html>
+{% endblock %}

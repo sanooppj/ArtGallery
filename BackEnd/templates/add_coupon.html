@@ -1,0 +1,69 @@
+{% extends 'index.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+<form method="POST" action="{% url 'save_coupon' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="col-md-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h3 style="color: blue; margin-bottom:20px;" class="card-title">Coupon Information</h3>
+
+                <div class="form-group">
+                    <label for=""> Coupon Code</label>
+                    <input type="text" class="form-control" name="code" placeholder="Enter coupon code">
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="">Discount %</label>
+                    <input type="number" class="form-control" name="discount" placeholder="Enter the discount percentage">
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="">Minimum value</label>
+                    <input type="number" class="form-control" name="min_price" placeholder="Enter the minuimum value">
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="">Valid from</label>
+                    <input type="datetime-local" class="form-control" name="valid_from" value="{{ current_datetime }}" readonly>
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="">Valid to</label>
+                    <input type="datetime-local" class="form-control" name="valid_to" placeholder="Enter the due date">
+                </div><br>
+                <div class="form-group">
+                    <input type="checkbox" name="status" value="true">&nbsp;Set as Active
+                </div>
+                <br>
+
+                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                <button class="btn btn-light">Cancel</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+</body>
+
+<script>
+    // Set the current date and time in the "valid_from" input field
+    var now = new Date();
+    var year = now.getFullYear();
+    var month = now.getMonth() + 1 < 10 ? '0' + (now.getMonth() + 1) : now.getMonth() + 1;
+    var day = now.getDate() < 10 ? '0' + now.getDate() : now.getDate();
+    var hours = now.getHours() < 10 ? '0' + now.getHours() : now.getHours();
+    var minutes = now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes();
+    var current_datetime = year + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
+    document.getElementsByName("valid_from")[0].value = current_datetime;
+</script>
+
+</html>
+{% endblock %}

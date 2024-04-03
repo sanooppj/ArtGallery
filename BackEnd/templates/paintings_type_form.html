@@ -1,0 +1,32 @@
+{% extends 'index.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+<form method="POST" action="{% url 'paintings_type_save' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="col-md-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h3 style="color: blue; margin-bottom:20px;" class="card-title">Paintings Information</h3>
+                <div class="form-group">
+                    <label for="">Type Name</label>
+                    <input type="text" class="form-control" name="painting_type" placeholder="Enter paintings type name">
+                </div>
+                <br>
+
+                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                <button class="btn btn-light">Cancel</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+</body>
+</html>
+{% endblock %}

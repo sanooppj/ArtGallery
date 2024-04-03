@@ -1,0 +1,308 @@
+{% extends 'About.html' %}
+{% load static %}
+{% block content %}
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Responsive Bootstrap4 Shop Template, Created by Imran Hossain from https://imransdesign.com/">
+
+	<!-- title -->
+	<title>Single Product</title>
+
+	<!-- favicon -->
+	<link rel="shortcut icon" type="image/png" href="{% static 'Web/assets/img/favicon.png' %}">
+	<!-- google font -->
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
+	<!-- fontawesome -->
+	<link rel="stylesheet" href="{% static 'Web/assets/css/all.min.css' %}">
+	<!-- bootstrap -->
+	<link rel="stylesheet" href="{% static 'Web/assets/bootstrap/css/bootstrap.min.css' %}">
+	<!-- owl carousel -->
+	<link rel="stylesheet" href="{% static 'Web/assets/css/owl.carousel.css' %}">
+	<!-- magnific popup -->
+	<link rel="stylesheet" href="{% static 'Web/assets/css/magnific-popup.css' %}">
+	<!-- animate css -->
+	<link rel="stylesheet" href="{% static 'Web/assets/css/animate.css' %}">
+	<!-- mean menu css -->
+	<link rel="stylesheet" href="{% static 'Web/assets/css/meanmenu.min.css' %}">
+	<!-- main style -->
+	<link rel="stylesheet" href="{% static 'Web/assets/css/main.css' %}">
+	<!-- responsive -->
+	<link rel="stylesheet" href="{% static 'Web/assets/css/responsive.css' %}">
+<style>
+#removeImageButton {
+		display: none;
+    }
+
+
+ .userspan{
+	 color: #fff;
+	font-weight: 700;
+	padding: 15px;
+	}
+
+		.userspan:hover{
+	color:#F28123;
+	}
+</style>
+
+</head>
+<body>
+
+
+
+<!-- Your existing navigation bar code -->
+<nav class="main-menu">
+  <ul>
+    <li><a href="{% url 'Home_page' %}">Home</a></li>
+    <li><a href="{% url 'About_page' %}">About</a></li>
+    <li  class="current-list-item"><a href="#">Pages</a>
+      <ul class="sub-menu">
+        <li><a href="{% url 'user_painting' %}">Upload paintings</a></li>
+        <li><a href="{% url 'search_painting' %}">Search a painting</a></li>
+		          <li><a href="{% url 'learn_art' %}">classes for art</a></li>
+
+      </ul>
+    </li>
+    <li><a href="{% url 'Contact_page' %}">Contact</a></li>
+    <li><a href="{% url 'Shop' %}">Shop</a></li>
+       <li>
+									{% for i in user_profile %}
+										<img src="{{ i.profile_image.url }}" style="margin-left:100px;border:2px solid #F28123;object-fit:cover;"
+											 alt="" name="image" class="rounded-circle" height="35px" width="35px">
+									{% empty %}
+										{% if request.session.Username %}
+											<!-- Show default image if user_profile is empty -->
+											<img src="{% static 'Web/assets/img/usericon11.png' %}" style="margin-left:100px;border:2px solid #F28123;display:cover;"
+												 alt="Default Image" name="image" class="rounded-circle" height="35px" width="35px">
+										{% endif %}
+									{% endfor %}
+									{% if request.session.Username %}
+										<span class="userspan">{{request.session.Username}}</span>
+										<i class="bi bi-chevron-down " style="color:#fff;font-weight:bold;margin-left:-10px;"></i>
+										<ul class="sub-menu"  style="margin-left:100px;">
+											<li><a href="{% url 'profile_page' %}">My account</a></li>
+        <li><a href="#" data-toggle="modal" data-target="#logoutModal">Logout</a></li>
+										</ul>
+									{% else %}
+
+								<li>
+											<a href="{% url 'Login_page'%}" class="nav-link">
+												<i class="bi bi-person-plus" style="font-size: 20px;margin-left:30px;"></i>
+											</a>
+										</li>
+									{% endif %}
+								</li>
+    <li>
+      <div class="header-icons">
+        <a class="wishlist-icon" href="{% url 'wishlist' %}"><i class="far fa-heart"></i></a>
+        <a class="shopping-cart" href="{% url 'Cart_page' %}"><i class="fas fa-shopping-cart"></i></a>
+<a class="dropdown-toggle hidden-arrow " style="border: none; " href="#" id="navbarDropdownMenuLink" role="button" data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
+			<i class="fas fa-search"></i> <!-- Search icon -->
+		</a>
+		<ul class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdownMenuLink" style="background-color: rgb(180, 180, 180)" >
+			<li>
+				<div class="input-group mt-2 mx-2" >
+					<div class="form-outline w-auto" data-mdb-input-init >
+						<input type="search" id="search-input-dropdown" class="form-control" style="width: 280px;" />
+						<label class="form-label" for="search-input-dropdown" style="width: 200px;">Search</label>
+					</div>
+				</div>
+			</li>
+			{% for painting in paintings %}
+			<li class="dropdown-item" style=" display: none;"  data-name="{{ painting.pname }}"><a href="{% url 'Single_page' painting.id %}">{{ painting.pname }}</a></li>
+			{% endfor %}
+		</ul>
+      </div>
+    </li>
+  </ul>
+</nav>
+						<a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
+												<div class="mobile-menu"></div>
+
+						<!-- menu end -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end header -->
+
+
+<!-- search area -->
+	<div class="search-area">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<span class="close-btn"><i class="fas fa-window-close"></i></span>
+					<div class="search-bar">
+						<div class="search-bar-tablecell">
+							<form action="{% url 'search' %}" method="get">
+							<h3>Search For:</h3>
+							<input id="query" name="query" type="text" placeholder="Keywords">
+							<button type="submit">Search <i class="fas fa-search"></i></button>
+								</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end search area -->
+
+
+<!-- Logout Modal -->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                  <h5 class="modal-title" id="logoutModalLabel">
+                    <div style="display: flex; align-items: center;">
+					<i class="fas fa-exclamation-circle" style="margin-right: 6px;margin-top:-2px;"></i>
+                        <div>Are you sure you want to logout ?</div>
+                    </div>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+           <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" style="margin-top:40px !important;" data-dismiss="modal">Cancel</button>
+				&nbsp;
+                <a href="{% url 'user_logout' %}" class="btn btn-primary" style="margin-top:40px !important;">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+	<!-- breadcrumb-section -->
+	<div class="breadcrumb-section breadcrumb-bg">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 offset-lg-2 text-center">
+					<div class="breadcrumb-text">
+						<p>Discover Inspiring Creations</p>
+						<h1>Upload Painting</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end breadcrumb section -->
+
+	<div class="contact-from-section mt-150 mb-150">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 mb-5 mb-lg-0">
+					<div class="form-title">
+						<h2>Have you any question?</h2>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur, ratione! Laboriosam est, assumenda. Perferendis, quo alias quaerat aliquid. Corporis ipsum minus voluptate? Dolore, esse natus!</p>
+					</div>
+					<div class="contact-form">
+						<form action="{% url 'user_painting_update' p_id=paintings.id %}" method="post" enctype="multipart/form-data">
+							{% csrf_token %}
+							<p>
+								<div>
+									<div class="mb-4 d-flex justify-content-center">
+										<img id="selectedImage" src="{{ paintings.picture.url}}"
+										alt="example placeholder" style="width: 500px;" />
+									</div>
+<div class="d-flex justify-content-center">
+    <div class="btn btn-primary btn-rounded">
+        <label class="form-label text-white m-1" for="customFile1">Choose file</label>
+        <!-- Use Django template tag to set the value of the input field -->
+        <input type="file" class="form-control d-none" name="picture" id="customFile1" onchange="displaySelectedImage(event, 'selectedImage')"  />
+    </div>
+</div>
+								</div>
+
+							<input type="hidden" placeholder="upload painting" name="username" value="{{request.session.Username}}">
+
+							</p>
+
+							<p>
+								<input type="text" placeholder="Painting Name" style="margin-bottom: 20px;" name="pname" value="{{paintings.pname}}" id="pname">&nbsp;
+								<input type="tel" placeholder="Painting Price" name="price" value="{{paintings.price}}" id="price">&nbsp;
+
+								<input type="tel" placeholder="No.of copies" style="margin-bottom: 20px;" name="no_copies" value="{{paintings.no_copies}}" id="copies">&nbsp;
+
+								 <select class="form-control" name="painting_type"  value="{{paintings.no_copies}}" style="height:57px; width:48%; position: relative; top: -58px; left: 560px;" id="painting_type" required>
+                        <option >{{paintings.picture_type}}</option>
+                                                    {% for i in data %}
+                                    <option>{{i.type}}</option>
+                                                    {% endfor %}
+
+                                </select>
+								<input type="text" placeholder="Artist Name" style="margin-bottom: 20px;" name="artist_name" value="{{paintings.artist_name}}" id="artist_name">&nbsp;
+								<input type="text" placeholder="Location" style="margin-bottom: 20px;" name="location" value="{{paintings.location}}" id="location">&nbsp;
+
+								<textarea name="description" id="description" placeholder="description">{{paintings.description}}</textarea>
+
+
+
+							</p>
+							<div>
+								<div class="d-flex justify-content-center mb-4">
+									<img id="selectedAvatar" src="{{ paintings.artist_picture.url}}"
+									class="rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" />
+								</div>
+								<div class="d-flex justify-content-center">
+									<div class="btn btn-primary btn-rounded">
+										<label class="form-label text-white m-1" for="customFile2">Choose file</label>
+										<input type="file" class="form-control d-none" name="artist_picture" id="customFile2" onchange="displaySelectedImage(event, 'selectedAvatar')" />
+									</div>&nbsp;&nbsp;
+									<input type="button" class="btn btn-danger" id="removeImageButton"  value="Remove" onclick="removeImage()">
+								</div>
+							</div><br>
+
+							 <p>
+							<div class="text-center">
+							<a href="{% url 'profile_user_paintings' %}">
+								<input type="button" class="btn btn-secondary px-5" style="margin-left:20px; padding:7px; font-size:14px; padding:10px; border-radius:10px !important;" value="Cancel"></a>
+								<input type="submit" class="cart-btn px-5" style="text-transform:none; font-weight:normal; color:white; margin-left:20px; padding:9px; font-size:14px; border-radius:10px !important;" value="Submit">
+							</div>
+							</p>
+						</form>
+					</div>
+				</div>
+                </div>
+                </div>
+                </div>
+
+				<script>
+					function removeImage() {
+						// Reset the value of the file input field
+						document.getElementById('customFile2').value = '';
+						// Reset the selected image
+						document.getElementById('selectedAvatar').src = "{% static 'Web/assets/img/usericon11.png' %}";
+
+						// Hide the remove button again
+						document.getElementById('removeImageButton').style.display = 'none';
+					}
+
+					function displaySelectedImage(event, elementId) {
+						const selectedImage = document.getElementById(elementId);
+						const fileInput = event.target;
+
+						if (fileInput.files && fileInput.files[0]) {
+							const reader = new FileReader();
+
+							reader.onload = function (e) {
+								selectedImage.src = e.target.result;
+								// Show the remove button once an image is uploaded
+								document.getElementById('removeImageButton').style.display = 'inline-block';
+							};
+
+							reader.readAsDataURL(fileInput.files[0]);
+						} else {
+							// If no image is selected, hide the remove button
+							document.getElementById('removeImageButton').style.display = 'none';
+						}
+					}
+				</script>
+</body>
+</html>
+{%endblock%}

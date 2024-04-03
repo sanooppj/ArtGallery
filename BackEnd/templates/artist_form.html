@@ -1,0 +1,83 @@
+{% extends 'index.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .image-preview {
+            display: none; /* Hide the image preview by default */
+            margin-top: 10px;
+        }
+
+        .image-preview img {
+            width: 100px; /* Adjust the width of the previewed image */
+            height: auto; /* Maintain aspect ratio */
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<form method="POST" action="{% url 'artist_save' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="col-md-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h3 style="color: blue; margin-bottom:20px;" class="card-title">Artists Information</h3>
+
+                <div class="form-group">
+                    <label for="">Artist Name</label>
+                    <input type="text" class="form-control" name="name" placeholder="Enter artist name">
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="">Artist Link</label>
+                    <input type="text" class="form-control" name="link" placeholder="Copy the link">
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="">Artist Picture</label>
+                    <input type="file" class="form-control" name="picture" id="paintingFile" onchange="previewImage('paintingFile', 'paintingPreview');" placeholder="Upload artist picture">
+                    <br>
+                    <div id="paintingPreview" class="image-preview"></div> <!-- This div will contain the image preview -->
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="">Year</label>
+                    <input type="text" class="form-control" name="year" placeholder="Enter the year">
+                </div><br>
+                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                <button class="btn btn-light">Cancel</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+function previewImage(fileInputId, previewAreaId) {
+    const fileInput = document.getElementById(fileInputId);
+    const previewArea = document.getElementById(previewAreaId);
+
+    if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.alt = 'Preview';
+            img.style.width = '100%'; /* Adjust the width of the previewed image to fit its container */
+            img.style.height = 'auto'; /* Maintain aspect ratio */
+            previewArea.innerHTML = ''; // Clear previous preview
+            previewArea.appendChild(img);
+            previewArea.style.display = 'block'; // Show the image preview
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+    } else {
+        previewArea.innerHTML = ''; // Clear preview if no file selected
+        previewArea.style.display = 'none'; // Hide the image preview
+    }
+}
+</script>
+</body>
+</html>
+{% endblock %}

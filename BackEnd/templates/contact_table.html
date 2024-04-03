@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+{% extends 'index.html' %}
+{% load static %}
+
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        th, td {
+            text-align: center;
+            border: 1px solid #555;
+
+        }
+
+        th {
+            background-color: rgb(211, 211, 229);
+        }
+
+        .description-cell {
+            max-width: 150px;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .description-line {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .description-content {
+            display: none;
+            white-space: pre-line;
+            overflow: hidden;
+        }
+
+        .expand-button,
+        .collapse-button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 5px;
+            cursor: pointer;
+            color: blue;
+        }
+
+        .collapse-button {
+            display: none;
+        }
+
+        .action-container {
+            max-width:55px;
+        }
+
+        /* Add the following CSS for the specified columns */
+        .max-width-category {
+            max-width: 100px; /* Adjust the max-width as needed */
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis; /* Add ellipsis for overflow text */
+        }
+
+        .max-width-item {
+            max-width: 70px; /* Adjust the max-width as needed */
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis; /* Add ellipsis for overflow text */
+        }
+
+        .max-width-availability {
+            max-width: 80px; /* Adjust the max-width as needed */
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis; /* Add ellipsis for overflow text */
+        }
+    </style>
+</head>
+<body>
+
+<div class="col-lg-16 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h3 style="color: blue; margin-bottom: 20px; margin-top: -20px;">User query details</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="max-width-category">Username</th>
+                        <th class="max-width-item">Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Subject</th>
+                        <th  style="width:200px !important;">Message</th>
+                        <th>Actions</th>
+                      </tr>
+                </thead>
+                {% for i in data %}
+                <tbody>
+                    <tr>
+                        <td class="max-width-category">{{ i.username }}</td>
+                        <td>{{ i.name }}</td>
+                        <td>{{ i.email }}</td>
+                        <td>{{ i.phone }}</td>
+                        <td>{{ i.subject }}</td>
+                        <td class="description-cell">
+
+                              <div class="description-line">{{ i.message }}</div>
+                            <div class="description-content">{{ i.message }}</div>
+                            <div class="expand-button" onclick="expandDescription(this)">&#9658;</div>
+                            <div class="collapse-button" onclick="collapseDescription(this)">&#9660;</div>
+                        </td>
+
+                        <td class="action-container" >
+                            <a href="{% url 'contact_delete' c_id=i.id %}">
+                                <img src="{% static 'admin2/delete.png' %}" style="margin-left:-10px;" alt="delete Icon" style="width: 35px; height: 35px;">
+                                <span class="action-text" style="margin-left: -11px; color: red;">delete</span>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    // Using event delegation for dynamically added elements
+    $(document).on("click", ".expand-button", function() {
+        expandDescription(this);
+    });
+
+    $(document).on("click", ".collapse-button", function() {
+        collapseDescription(this);
+    });
+
+    function expandDescription(button) {
+        var descriptionCell = $(button).parent(".description-cell");
+        descriptionCell.find(".description-line").hide();
+        descriptionCell.find(".description-content").slideDown();
+        $(button).hide();
+        descriptionCell.find(".collapse-button").show();
+    }
+
+    function collapseDescription(button) {
+        var descriptionCell = $(button).parent(".description-cell");
+        descriptionCell.find(".description-content").slideUp();
+        $(button).hide();
+        descriptionCell.find(".expand-button").show();
+        descriptionCell.find(".description-line").show();
+    }
+</script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{% if messages %}
+    {% for i in messages %}
+          {% if i.tags == 'warning' %}
+                 <script>
+                     swal('{{i}}','','warning')
+                 </script>
+{% elif i.tags == 'error' %}
+                  <script>
+                     swal('{{i}}','','error')
+                 </script>
+{% elif i.tags == 'success' %}
+                   <script>
+                     swal('{{i}}','','success')
+                 </script>
+{% else %}
+                <script>
+                     swal('{{i}}','','info')
+                </script>
+{%endif%}
+{%endfor%}
+{%endif%}
+</body>
+</html>
+{% endblock %}
+
+
+
+

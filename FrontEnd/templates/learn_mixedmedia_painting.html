@@ -1,0 +1,416 @@
+{% extends 'About.html' %}
+{% load static %}
+{% block content %}
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+	<style>
+		.customwater1{
+background-image: url("{{ record.image1.url }}");
+margin-top:50px;
+
+		}
+		.customwater2{
+background-image: url("{{ record.image2.url }}");
+margin-top:50px;
+
+		}
+		.customwater3{
+background-image: url("{{ record.image3.url }}");
+margin-top:50px;
+
+
+		}
+		.customwater4{
+background-image: url("{{ record.image4.url }}");
+margin-top:50px;
+
+		}
+		.customwater5{
+background-image: url("{{ record.image5.url }}");
+margin-top:50px;
+
+		}
+
+.block__76208 .accordion-item .heading {
+  font-size: 16px;
+  font-weight: 400;
+  padding: 10px 0; }
+  .block__76208 .accordion-item .heading > a {
+    padding-left: 35px;
+    position: relative;
+    color: #000; }
+    .block__76208 .accordion-item .heading > a:before {
+      content: "";
+      width: 20px;
+      height: 20px;
+      line-height: 18px;
+      border: 1px solid #ccc;
+      text-align: center;
+      font-size: 18px;
+      top: .1em;
+      left: 0;
+      border-radius: 50%; }
+    .block__76208 .accordion-item .heading > a[aria-expanded="true"]:before {
+      font-family: 'icomoon';
+      position: absolute;
+      content: "\e316";
+      -webkit-transition: .3s all ease;
+      -o-transition: .3s all ease;
+      transition: .3s all ease;
+      background: #89ba16;
+      color: #fff;
+      border: 1px solid #89ba16; }
+    .block__76208 .accordion-item .heading > a[aria-expanded="false"]:before {
+      content: "\e313";
+      color: #ccc;
+      font-family: 'icomoon';
+      position: absolute;
+      -webkit-transition: .3s all ease;
+      -o-transition: .3s all ease;
+      transition: .3s all ease; }
+
+.block__76208 .accordion-item .body-text {
+  font-size: 16px;
+  padding: 5px 0;
+  padding-left: 30px; }
+
+
+
+	</style>
+</head>
+<body>
+<nav class="main-menu">
+  <ul>
+    <li><a href="{% url 'Home_page' %}">Home</a></li>
+    <li ><a href="{% url 'About_page' %}">About</a></li>
+    <li><a href="#">Pages</a>
+      <ul class="sub-menu">
+        <li><a href="{% url 'user_painting' %}">Upload paintings</a></li>
+		          <li><a href="{% url 'search_painting' %}">Search a painting</a></li>
+		          <li><a href="{% url 'learn_art' %}">classes for art</a></li>
+
+      </ul>
+    </li>
+    <li ><a href="{% url 'Contact_page' %}">Contact</a></li>
+    <li><a href="{% url 'Shop' %}">Shop</a></li>
+       <li>
+									{% for i in user_profile %}
+										<img src="{{ i.profile_image.url }}" style="margin-left:100px;border:2px solid #F28123;object-fit:cover;"
+											 alt="" name="image" class="rounded-circle" height="35px" width="35px">
+									{% empty %}
+										{% if request.session.Username %}
+											<!-- Show default image if user_profile is empty -->
+											<img src="{% static 'Web/assets/img/usericon11.png' %}" style="margin-left:100px;border:2px solid #F28123;display:cover;"
+												 alt="Default Image" name="image" class="rounded-circle" height="35px" width="35px">
+										{% endif %}
+									{% endfor %}
+									{% if request.session.Username %}
+										<span class="userspan">{{request.session.Username}}</span>
+										<i class="bi bi-chevron-down " style="color:#fff;font-weight:bold;margin-left:-10px;"></i>
+										<ul class="sub-menu"  style="margin-left:100px;">
+											<li><a href="{% url 'profile_page' %}">My account</a></li>
+        <li><a href="#" data-toggle="modal" data-target="#logoutModal">Logout</a></li>
+										</ul>
+									{% else %}
+
+								<li>
+											<a href="{% url 'Login_page'%}" class="nav-link">
+												<i class="bi bi-person-plus" style="font-size: 20px;margin-left:30px;"></i>
+											</a>
+										</li>
+									{% endif %}
+								</li>
+    <li>
+      <div class="header-icons">
+        <a class="wishlist-icon" href="{% url 'wishlist' %}"><i class="far fa-heart"></i></a>
+        <a class="shopping-cart" href="{% url 'Cart_page' %}"><i class="fas fa-shopping-cart"></i></a>
+<a class="dropdown-toggle hidden-arrow " style="border: none; " href="#" id="navbarDropdownMenuLink" role="button" data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
+			<i class="fas fa-search"></i> <!-- Search icon -->
+		</a>
+		<ul class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdownMenuLink" style="background-color: rgb(180, 180, 180)" >
+			<li>
+				<div class="input-group mt-2 mx-2" >
+					<div class="form-outline w-auto" data-mdb-input-init >
+						<input type="search" id="search-input-dropdown" class="form-control" style="width: 280px;" />
+						<label class="form-label" for="search-input-dropdown" style="width: 200px;">Search</label>
+					</div>
+				</div>
+			</li>
+			{% for painting in paintings %}
+			<li class="dropdown-item" style=" display: none;"  data-name="{{ painting.pname }}"><a href="{% url 'Single_page' painting.id %}">{{ painting.pname }}</a></li>
+			{% endfor %}
+		</ul>
+      </div>
+    </li>
+  </ul>
+</nav>
+						<a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
+						<div class="mobile-menu"></div>
+						<!-- menu end -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end header -->
+
+
+	<!-- search area -->
+	<div class="search-area">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<span class="close-btn"><i class="fas fa-window-close"></i></span>
+					<div class="search-bar">
+						<div class="search-bar-tablecell">
+							<form action="{% url 'search' %}" method="get">
+							<h3>Search For:</h3>
+							<input id="query" name="query" type="text" placeholder="Keywords">
+							<button type="submit">Search <i class="fas fa-search"></i></button>
+								</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end search area -->
+
+	<!-- breadcrumb-section -->
+	<div class="breadcrumb-section breadcrumb-bg" style="height:250px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 offset-lg-2 text-center">
+					<div class="breadcrumb-text">
+						<p>Discover Inspiring Creations</p>
+						<h1>Mixed Media  Painting</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end breadcrumb section -->
+
+<!-- advertisement section -->
+	<div class="abts-section mb-150" style="margin-top:200px;">
+		<div class="container">
+			<div class="row" style="margin-bottom:120px;">
+				<div class="col-lg-4 col-md-6" style="height:190px;">
+					<div class="watercolour customwater1" style="object-fit:cover;">
+						<a href="{{record.link1}}" class="video-play-btn popup-youtube"><i class="fas fa-play" style="margin-top:20px;"></i></a>
+					</div>
+				</div>
+				<div class="col-lg-8 col-md-12">
+					<div class="abt-text">
+						<h5>1. <span class="orange-text">{{record.subheading1}}</span></h5>
+ <p>
+    {% if record.description1|length > 1380 %}
+      <span id="description1_short">{{ record.description1|slice:":1380" }}...</span>
+      <span id="description1_long" style="display:none;">{{ record.description1 }}</span>
+      <button id="read_more_btn_1" onclick="toggleDescription('1')" class="btn btn-primary float-right m-4">Read more</button>
+    {% else %}
+      {{ record.description1 }}
+    {% endif %}
+  </p>
+				</div>
+				</div>
+
+			</div >
+			<div class="row" style="margin-bottom:120px;">
+				<div class="col-lg-8 col-md-12">
+					<div class="abt-text">
+						<h5>2. <span class="orange-text">{{record.subheading2}}</span></h5>
+
+
+<!-- Section for description2 -->
+  <p>
+        {% if record.description2|length > 1380 %}
+      <span id="description2_short">{{ record.description2|slice:":1380" }}...</span>
+      <span id="description2_long" style="display:none;">{{ record.description2 }}</span>
+      <button id="read_more_btn_2" onclick="toggleDescription('2')" class="btn btn-primary float-right m-4">Read more</button>
+    {% else %}
+      {{ record.description2 }}
+    {% endif %}
+  </p>
+
+
+					</div>
+				</div>
+								<div class="col-lg-4 col-md-6" style="height:190px;">
+					<div class="watercolour customwater2" style="object-fit:cover;">
+						<a href="{{record.link2}}" class="video-play-btn popup-youtube"><i class="fas fa-play" style="margin-top:20px;"></i></a>
+					</div>
+				</div>
+
+			</div>
+			<div class="row" style="margin-bottom:120px;">
+				<div class="col-lg-4 col-md-6" style="height:190px;">
+					<div class="watercolour customwater3" style="object-fit:cover;">
+						<a href="{{record.link3}}" class="video-play-btn popup-youtube"><i class="fas fa-play" style="margin-top:20px;"></i></a>
+					</div>
+				</div>
+				<div class="col-lg-8 col-md-12">
+					<div class="abt-text">
+						<h5>3. <span class="orange-text">{{record.subheading3}}
+						</span></h5>
+<!-- Section for description3 -->
+
+  <p>
+        {% if record.description3|length > 1380 %}
+      <span id="description3_short">{{ record.description3|slice:":1380" }}...</span>
+      <span id="description3_long" style="display:none;">{{ record.description3 }}</span>
+      <button id="read_more_btn_3" onclick="toggleDescription('3')" class="btn btn-primary float-right m-4">Read more</button>
+    {% else %}
+      {{ record.description3 }}
+    {% endif %}
+  </p>
+				</div>
+				</div>
+			</div>
+			<div class="row" style="margin-bottom:120px;">
+				<div class="col-lg-8 col-md-12">
+					<div class="abt-text">
+						<h5>4. <span class="orange-text">{{record.subheading4}}</span></h5>
+<!-- Section for description4 -->
+
+  <p>
+    {% if record.description4|length > 1380 %}
+      <span id="description4_short">{{ record.description4|slice:":1380" }}...</span>
+      <span id="description4_long" style="display:none;">{{ record.description4 }}</span>
+      <button id="read_more_btn_4" onclick="toggleDescription('4')" class="btn btn-primary float-right m-4">Read more</button>
+    {% else %}
+      {{ record.description4 }}
+    {% endif %}
+  </p>
+					</div>
+				</div>
+								<div class="col-lg-4 col-md-6" style="height:190px;">
+					<div class="watercolour customwater4" style="object-fit:cover;">
+						<a href="{{record.link4}}" class="video-play-btn popup-youtube"><i class="fas fa-play" style="margin-top:20px;"></i></a>
+					</div>
+				</div>
+
+			</div>
+			<div class="row" style="margin-bottom:120px;">
+				<div class="col-lg-4 col-md-6" style="height:190px;">
+					<div class=" watercolour customwater5" style="object-fit:cover;">
+						<a href="{{record.link5}}" class="video-play-btn popup-youtube"><i class="fas fa-play" style="margin-top:20px;"></i></a>
+					</div>
+				</div>
+				<div class="col-lg-8 col-md-12">
+					<div class="abt-text">
+						<h5>5. <span class="orange-text">{{record.subheading5}}
+						</span></h5>
+
+  <p>
+    {% if record.description5|length > 1380 %}
+      <span id="description5_short">{{ record.description5|slice:":1380" }}...</span>
+      <span id="description5_long" style="display:none;">{{ record.description5 }}</span>
+      <button id="read_more_btn_5" onclick="toggleDescription('5')" class="btn btn-primary float-right m-4">Read more</button>
+    {% else %}
+      {{ record.description5 }}
+    {% endif %}
+  </p>
+				</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<!-- end advertisement section -->
+<section class="site-section" id="accordion-mixed-media-painting">
+    <div class="container">
+        <div class="row accordion justify-content-center block__76208">
+            <div class="col-lg-6">
+                <h3 class="text-center"><span style="color:orange;">Course</span> Outcome</h3>
+                <ul>
+                    <li>Understanding the concept and techniques of mixed media art.</li>
+                    <li>Proficiency in combining various materials such as paint, collage, found objects, and textures in artworks.</li>
+                    <li>Ability to experiment with different mediums and tools to create unique effects and textures.</li>
+                    <li>Familiarity with layering techniques, image transfers, and other mixed media processes.</li>
+                    <li>Understanding color theory and composition principles in mixed media artwork.</li>
+                    <li>Ability to express ideas, emotions, and narratives through mixed media exploration.</li>
+                    <li>Exploration of themes and subjects using mixed media approaches, from abstract to figurative.</li>
+                    <li>Enhancement of creativity and innovation through hands-on mixed media projects and exercises.</li>
+                    <li>Appreciation for mixed media as a dynamic and expressive form of artistic expression.</li>
+                </ul>
+            </div>
+
+            <div class="col-lg-5 ml-auto" style="">
+                <div class="accordion-item">
+                    <h3 class="text-center">F<span style="color:orange;">A</span>Q</h3>
+                    <h3 class="mb-0 heading">
+                        <a class="btn-block h4" data-toggle="collapse" href="#collapseMixedMediaOne" role="button" aria-expanded="false" aria-controls="collapseMixedMediaOne">What materials can be used in mixed media painting?<span class="icon"></span></a>
+                    </h3>
+                    <div id="collapseMixedMediaOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion-mixed-media-painting">
+                        <div class="body-text">
+                            <p>Materials commonly used in mixed media painting include acrylic paint, watercolor, ink, collage materials such as paper, fabric, or found objects, as well as various tools for mark-making and texture creation.</p>
+                        </div>
+                    </div>
+                </div> <!-- .accordion-item -->
+
+                <!-- Second FAQ item -->
+                <div class="accordion-item">
+                    <h3 class="mb-0 heading">
+                        <a class="btn-block h4" data-toggle="collapse" href="#collapseMixedMediaTwo" role="button" aria-expanded="false" aria-controls="collapseMixedMediaTwo">How do you adhere different materials in mixed media?<span class="icon"></span></a>
+                    </h3>
+                    <div id="collapseMixedMediaTwo" class="collapse" aria-labelledby="headingOne" data-parent="#accordion-mixed-media-painting">
+                        <div class="body-text">
+                            <p>Various adhesives can be used to adhere different materials in mixed media, such as gel medium, matte medium, or PVA glue. It's important to choose an adhesive suitable for the specific materials being used and to apply it evenly for proper adhesion.</p>
+                        </div>
+                    </div>
+                </div> <!-- .accordion-item -->
+
+                <!-- Third FAQ item -->
+                <div class="accordion-item">
+                    <h3 class="mb-0 heading">
+                        <a class="btn-block h4" data-toggle="collapse" href="#collapseMixedMediaThree" role="button" aria-expanded="false" aria-controls="collapseMixedMediaThree">How do you create texture in mixed media painting?<span class="icon"></span></a>
+                    </h3>
+                    <div id="collapseMixedMediaThree" class="collapse" aria-labelledby="headingOne" data-parent="#accordion-mixed-media-painting">
+                        <div class="body-text">
+                            <p>Texture can be created in mixed media painting using various techniques such as layering different materials, applying texture mediums or gels, using found objects for imprinting, and experimenting with tools for mark-making and texture creation.</p>
+                        </div>
+                    </div>
+                </div> <!-- .accordion-item -->
+
+                <!-- Fourth FAQ item -->
+                <div class="accordion-item">
+                    <h3 class="mb-0 heading">
+                        <a class="btn-block h4" data-toggle="collapse" href="#collapseMixedMediaFour" role="button" aria-expanded="false" aria-controls="collapseMixedMediaFour">How do you protect mixed media paintings?<span class="icon"></span></a>
+                    </h3>
+                    <div id="collapseMixedMediaFour" class="collapse" aria-labelledby="headingOne" data-parent="#accordion-mixed-media-painting">
+                        <div class="body-text">
+                            <p>To protect mixed media paintings, they can be sealed with a protective varnish or fixative appropriate for the materials used. It's important to test the varnish or fixative on a small area first to ensure compatibility and desired results.</p>
+                        </div>
+                    </div>
+                </div> <!-- .accordion-item -->
+            </div>
+        </div>
+    </div>
+</section><script>
+  function toggleDescription(section) {
+    var shortText = document.getElementById("description" + section + "_short");
+    var longText = document.getElementById("description" + section + "_long");
+    var btnText = document.getElementById("read_more_btn_" + section);
+
+    if (longText.style.display === "none") {
+      longText.style.display = "inline";
+      btnText.innerHTML = "Read less";
+      shortText.style.display = "none"; // Hide the short text
+    } else {
+      longText.style.display = "none";
+      btnText.innerHTML = "Read more";
+      shortText.style.display = "inline"; // Show the short text
+    }
+
+    var dots = shortText.innerHTML.indexOf('...');
+    if (dots !== -1) {
+      shortText.innerHTML = shortText.innerHTML.replace('...', '');
+    }
+  }
+</script>
+</body>
+</html>
+{%endblock%}

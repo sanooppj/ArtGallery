@@ -1,0 +1,46 @@
+{% if paintings %}
+    <div class="row product-lists">
+        {% for i in paintings %}
+            <div class="col-md-6 col-lg-3 text-center strawberry">
+                <div class="single-product-item" style="border: 2px solid rgb(239, 237, 237);">
+                    <div class="product-image">
+                        <a href="{% url 'Single_page' p_id=i.id %}"><img src="{{ i.picture.url }}" alt=""></a>
+                    </div>
+                    <div class="text-container">
+                        <h6 class="truncate-text" style="font-size:16px;margin-bottom:5px;">{{ i.pname }}</h6>
+                    </div>
+                    <p class="product-price"><span></span>Rs. {{ i.price }}/-</p>
+                    <a href="{% url 'Single_page' p_id=i.id %}" class="cart-btn" style="font-size: 13px !important;">View</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="row pagination-wrap mt-5 wow fadeIn" data-wow-delay="0.5s">
+        <div class="col-md-5 text-center text-md-left mb-4 mb-md-0 ml-md-5">
+            <span>Showing {{ paintings.start_index }}-{{ paintings.end_index }} of {{ total_paintings }} paintings</span>
+        </div>
+        <div class="col-md-6 text-center text-md-right">
+            <div class=" custom-pagination ml-auto">
+                {% if paintings.has_previous %}
+                    <a href="?page={{ paintings.previous_page_number }}" class="prev">Prev</a>
+                {% else %}
+                    <span class="prev disabled">Prev</span>
+                {% endif %}
+                {% for num in paintings.paginator.page_range %}
+                    {% if num == paintings.number %}
+                        <a href="#" class="active">{{ num }}</a>
+                    {% elif num >= paintings.number|add:"-2" and num <= paintings.number|add:"2" %}
+                        <a href="?page={{ num }}">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+                {% if paintings.has_next %}
+                    <a href="?page={{ paintings.next_page_number }}" class="next">Next</a>
+                {% else %}
+                    <span class="next disabled">Next</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% else %}
+    <p class="text-center">No paintings found.</p>
+{% endif %}

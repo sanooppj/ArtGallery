@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+{% extends 'index.html' %}
+{% load static %}
+
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        th, td {
+            text-align: center;
+            border: 1px solid #555;
+
+        }
+
+        th {
+            background-color: rgb(211, 211, 229);
+        }
+
+        .action-container {
+            max-width:55px;
+        }
+
+        /* Add the following CSS for the specified columns */
+        .max-width-category {
+            max-width: 100px; /* Adjust the max-width as needed */
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis; /* Add ellipsis for overflow text */
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h3 style="color: blue; margin-bottom: 20px; margin-top: -20px;">Item Details</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="max-width-category">Painting Type</th>
+                        <th colspan="2">Actions</th>
+                      </tr>
+                </thead>
+                {% for i in data %}
+                <tbody>
+                    <tr>
+                        <td class="max-width-category">{{ i.type }}</td>
+
+
+                        <td class="action-container" >
+                            <a href="{% url 'paintings_type_delete' p_id=i.id %}">
+                                <img src="{% static 'admin2/delete.png' %}" style="margin-left:-10px;" alt="delete Icon" style="width: 35px; height: 35px;">
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+{% endblock %}
+

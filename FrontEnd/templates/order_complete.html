@@ -1,0 +1,320 @@
+{% load static %}
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Responsive Bootstrap4 Shop Template, Created by Imran Hossain from https://imransdesign.com/">
+
+
+		<!-- favicon -->
+	<link rel="shortcut icon" type="image/png" href="{% static 'Web/assets/img/favicon.png' %}">
+	<!-- google font -->
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
+	<!-- fontawesome -->
+	<link rel="stylesheet" href="{% static 'Web/assets/css/all.min.css' %}">
+	<!-- bootstrap -->
+	<link rel="stylesheet" href="{% static 'Web/assets/bootstrap/css/bootstrap.min.css' %}">
+	<!-- owl carousel -->
+	<link rel="stylesheet" href="{% static 'Web/assets/css/owl.carousel.css' %}">
+	<!-- magnific popup -->
+	<link rel="stylesheet" href="{% static 'Web/assets/css/magnific-popup.css' %}">
+	<!-- animate css -->
+	<link rel="stylesheet" href="{% static 'Web/assets/css/animate.css' %}">
+	<!-- mean menu css -->
+	<link rel="stylesheet" href="{% static 'Web/assets/css/meanmenu.min.css' %}">
+	<!-- main style -->
+	<link rel="stylesheet" href="{% static 'Web/assets/css/main.css' %}">
+	<!-- responsive -->
+	<link rel="stylesheet" href="{% static 'Web/assets/css/responsive.css' %}">
+
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+<style>
+	.userspan{
+	 color: #fff;
+	font-weight: 700;
+	padding: 15px;
+	}
+
+		.userspan:hover{
+	color:#F28123;
+	}
+
+
+  .alert-container {
+            position: fixed;
+            top: -100px; /* Initially off-screen */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            width: 100%;
+            max-width: 400px; /* Adjust width as needed */
+            text-align: center;
+            animation: slideDown 0.5s forwards;
+        }
+
+        @keyframes slideDown {
+            0% {
+                top: -100px; /* Off-screen */
+            }
+            100% {
+                top: 100px; /* 100px down from top */
+            }
+        }
+
+.alert {
+	position: relative;
+	margin-bottom: 15px;
+	border: 1px solid transparent;
+	border-radius: .25rem;
+}
+
+.alert-success {
+	color: black;
+    background-color:white;
+	border: 1px solid green !important;
+	font-size:15px;
+	font-weight:bold;
+}
+
+.alert-warning {
+	color: black;
+    background-color:white;
+	border: 1px solid #F28123 !important;
+	font-size:15px;
+	font-weight:bold;
+}
+
+.alert-error {
+    color: black;
+    background-color:white;
+	border: 1px solid #F28123 !important;
+	font-size:15px;
+	font-weight:bold;
+}.alert-info {
+    color: black;
+background-color: white;
+	border: 1px solid blue !important;
+	font-size:15px;
+	font-weight:bold;
+}
+	.userspan{
+	 color: #fff;
+	font-weight: 700;
+	padding: 15px;
+	}
+
+		.userspan:hover{
+	color:#F28123;
+	}
+.navhome {
+  padding-left: 200px;
+  padding-top: 100px;
+  margin-bottom: -40px;
+}
+
+.navhome a::before {
+  content: "» "; /* Unicode for double greater than symbol */
+  font-size:25px;
+}
+.navhome a {
+  color: blue; /* Text color for the link */
+  text-decoration: none; /* Remove underline from the link */
+  font-weight: bold; /* Set font weight to bold */
+  font-size:19px;
+}
+
+.navhome a:hover {
+  color: red; /* Text color when hovering over the link */
+}
+
+
+
+</style>
+
+</head>
+<body>
+
+	<!--PreLoader-->
+    <div class="loader">
+        <div class="loader-inner">
+            <div class="circle"></div>
+        </div>
+    </div>
+
+
+<!-- Your existing navigation bar code -->
+<nav class="navhome" >
+  <a href="{% url 'Home_page' %}"> Go to home</a>
+</nav>
+<div class="container ">
+    <div class="card mt-5 pt-1">
+        <div class="card-body">
+            <div class="container mb-5 mt-3">
+                <div class="row d-flex align-items-baseline">
+                    <div class="col-xl-9">
+                        <p style="color: #7e8d9f;font-size: 20px;">Invoice >> <strong>Order ID: {{ order.order_id }}</strong></p>
+                    </div>
+                    <hr>
+                    <div>
+                        <button class="btn btn-warning ml-left" id="printInvoice">Print</button>
+                    </div>
+                </div>
+                <br><br>
+
+                <div class="container">
+                    <div class="col-md-12">
+                        <div class="text-center">
+                            <i class="fab fa-mdb fa-4x ms-0" style="color:#5d9fc5 ;"></i>
+                            <p class="pt-0"><h3><span style="color: orange; font-weight: bold"> ArtGallery Invoice</span> </h3></p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xl-8 ">
+                            <ul class="list-unstyled">
+                                <li class="text-muted"><h5>To:</h5> <span style="color:#5d9fc5 ;"><h6>{{ order.address.firstname }} {{ order.address.lastname }}</h6></span></li>
+                                <li class="text-muted"><h6>{{ order.address.full_name }}</h6></li>
+                                <li class="text-muted"><h6>{{ order.address.address_line_1 }},{{ order.address.address_line_2 }}</h6></li>
+                                <li class="text-muted"><h6>{{ order.address.city }}</h6></li>
+                                <li class="text-muted"><h6>{{ order.address.state }}</h6></li>
+                                <li class="text-muted"><h6><i class="fa fa-phone "></i> {{ order.address.phone }}</h6></li>
+                                <li class="text-muted"><h6><i class="fa fa-envelope "></i> {{ order.address.email }}</h6></li>
+                            </ul>
+                        </div>
+                        <div class="col-xl-4">
+                            <p class="text-muted"><h5>Invoice</p></h5>
+                            <ul class="list-unstyled">
+                                <li class="text-muted"><i class="fa fa-circle" style="color:#40464c ;"></i> <span class="fw-bold">Payment Method: </span>{{ order.payment_method }}</li>
+                                <li class="text-muted"><i class="fa fa-circle" style="color:#40464c  ;"></i> <span class="fw-bold">Creation Date: </span>{{ order.created_at }}</li>
+                                <li class="text-muted"><i class="fa fa-circle" style="color:#40464c  ;"></i> <span class="me-1 fw-bold">Ordered From: </span>{{ order.address.firstname }} {{ order.address.lastname }}</li>
+                                <li class="text-muted"><i class="fa fa-circle" style="color:#40464c  ;"></i> <span class="me-1 fw-bold">Order Status: </span>{{ order.order_status }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row my-2 mx-1 justify-content-center">
+                        <table class="table table-striped table-borderless">
+                            <thead style="background-color: #828bb3;" class="text-white">
+                                <tr>
+                                    <th scope="col" class="text-center">Product</th>
+                                    <th scope="col" class="text-center"></th>
+                                    <th scope="col" class="text-center">Unit Price</th>
+                                    <th scope="col" class="text-center">Quantity</th>
+                                    <th scope="col" class="text-center">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in order_items %}
+                                <tr>
+                                    <td class="text-center" style="padding-top: 3rem;">{{ item.painting.pname }}</td>
+                                    <td class="text-center"><img src="{{ item.painting.picture.url }}" style="height: 60px; width: 100px;object-fit:cover;border-radius:3px;" alt="IMG"/></td>
+                                    <td class="text-center" style="padding-top: 3rem;">₹ {{ item.price }}</td>
+                                    <td class="text-center" style="padding-top: 3rem;">x{{ item.quantity }}</td>
+                                    <td class="text-center" style="padding-top: 3rem;">₹ {{ item.total_price }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <div class="row justify-content-end">
+                        <div class="col-xl-5 ml-4">
+                            <h4>
+                                    <li  style="font-size:15px;list-style-type: none !important;">SubTotal <span style="margin-left:101px;"></span>  : ₹  {{ order.total_price }}.00</li>
+                                    <li  style="font-size:15px;list-style-type: none !important;">Discount <span style="margin-left:100px;"></span> : ₹ {{order.discount }}.00</li>
+                                    <li  style="font-size:15px;list-style-type: none !important;">Shipping charge  <span style="margin-left:41px;"></span>  : ₹ 70.00</li>
+                                    <li  style="font-size:15px;list-style-type: none !important;"> Sum Total <span style="margin-left:91px;"></span>  : ₹  {{order.grand_total }}.00</li>
+                                    <li  style="font-size:15px;list-style-type: none !important;"> Total Amount  <span style="margin-left:63px;"></span> :   ₹ {{order.grand_total }}.00</li>
+                            </h4>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-xl-12 justify-content-center d-flex">
+                            <p><span style="color: orange; font-weight: bold">Thank you for purchasing from us.</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="alert-container">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {% if message.tags == 'error' %}
+                    <img src="{% static 'Web/assets/img/error.png' %}" alt="Error Icon" style="margin-right:10px;" width="27px" height="27px"> <!-- Replace path/to/error-image.jpg with the path to your error image -->
+                                {{ message }}
+
+				{% endif %}
+				{% if message.tags == 'success' %}
+                    <img src="{% static 'Web/assets/img/green_tick.jpg' %}" alt="Error Icon"  width="35px" height="33px">
+                                {{ message }}
+
+				{% endif %}
+				{% if message.tags == 'warning' %}
+                    <img src="{% static 'Web/assets/img/warningicon.png' %}" style="margin-top:-7px !important;" alt="Error Icon" width="30px" height="28px">
+                               {{ message }}
+
+                {% endif %}
+				{% if message.tags == 'info' %}
+                    <img src="{% static 'Web/assets/img/info-icon.webp' %}" style="margin-right:7px !important;" alt="Error Icon" width="28px" height="32px">
+                               {{ message }}
+
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script>
+    $(document).ready(function() {
+        // Hide alerts after 5 seconds
+        setTimeout(function() {
+            $('.alert-container').fadeOut('medium');
+        }, 5000);
+    });
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Hide the "Go to home" link when the print button is clicked
+        $("#printInvoice").click(function() {
+            $(".navhome").hide(); // Hide the navigation bar
+            window.print(); // Trigger the print functionality
+        });
+
+        // Show the "Go to home" link after the print window is closed
+        $(window).on("afterprint", function() {
+            $(".navhome").show(); // Show the navigation bar
+        });
+    });
+</script>
+
+	<!-- jquery -->
+	<script src="{% static 'Web/assets/js/jquery-1.11.3.min.js' %}"></script>
+	<!-- bootstrap -->
+	<script src="{% static 'Web/assets/bootstrap/js/bootstrap.min.js' %}"></script>
+	<!-- count down -->
+	<script src="{% static 'Web/assets/js/jquery.countdown.js' %}"></script>
+	<!-- isotope -->
+	<script src="{% static 'Web/assets/js/jquery.isotope-3.0.6.min.js' %}"></script>
+	<!-- waypoints -->
+	<script src="{% static 'Web/assets/js/waypoints.js' %}"></script>
+	<!-- owl carousel -->
+	<script src="{% static 'Web/assets/js/owl.carousel.min.js' %}"></script>
+	<!-- magnific popup -->
+	<script src="{% static 'Web/assets/js/jquery.magnific-popup.min.js' %}"></script>
+	<!-- mean menu -->
+	<script src="{% static 'Web/assets/js/jquery.meanmenu.min.js' %}"></script>
+	<!-- sticker js -->
+	<script src="{% static 'Web/assets/js/sticker.js' %}"></script>
+	<!-- main js -->
+	<script src="{% static 'Web/assets/js/main.js' %}"></script>
+
+
+</body>
+</html>

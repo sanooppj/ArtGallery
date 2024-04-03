@@ -1,0 +1,385 @@
+{% extends 'Home.html' %}
+{% load static %}
+{% block content %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+<style>
+    .custom-placeorder{
+    width:40%;
+    margin-top:40px;
+    margin-bottom:100px;
+    color:white !important;
+    }
+    a {
+    text-decoration: none; /* Remove underline */
+    color: inherit; /* Use the default text color */
+}
+
+
+/* line 1488, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
+.cupon_area {
+  margin-bottom: 40px;
+}
+
+/* line 1491, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
+.cupon_area input {
+  margin-left: 30px;
+  max-width: 730px;
+  width: 100%;
+  display: block;
+  height: 40px;
+  border-radius: 3px;
+  padding: 0px 15px;
+  border: 1px solid #eeeeee;
+  outline: none;
+  box-shadow: none;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 991px) {
+  /* line 1491, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
+  .cupon_area input {
+    margin-left: 0;
+  }
+}
+
+/* line 1510, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
+.cupon_area .tp_btn {
+  margin-left: 30px;
+}
+
+@media (max-width: 991px) {
+  /* line 1510, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
+  .cupon_area .tp_btn {
+    margin-left: 0;
+  }
+}
+
+</style>
+</head>
+<body>
+  <!-- breadcrumb-section -->
+  <div class="breadcrumb-section breadcrumb-bg">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 offset-lg-2 text-center">
+          <div class="breadcrumb-text">
+            <p>Discover Inspiring Creations</p>
+            <h1>Check Out Product</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end breadcrumb section -->
+
+  <!-- check out section -->
+<div class="checkout-section mt-150 mb-150">
+    <div class="container-fluid">
+        <section class="checkout_area padding_top">
+            <div class="container">
+
+
+                <section class="checkout_area padding_top">
+    <div class="container">
+      <form id="coupon-form" method="post" required>
+        {% csrf_token %}
+      <div class="cupon_area">
+        <div class="check_title col-lg-9 mx-auto">
+          <h2 class="text-center font-weight-bold">
+            Have a coupon?
+          </h2>
+
+          <h2 class="text-center font-weight-bold" >Use <Code></Code><span style="color:#ff3368;">{{coupon.code}}</span> to avail <span style="color:#ff3368;">{{coupon.discount_percentage}}%</span> discount on your orders above <span style="color:#ff3368;">₹ {{coupon.minimum_price}}/-</span>, valid till <span style="color:#ff3368;">{{coupon.valid_to}}</span></h2>
+
+        </div>
+        <input type="hidden" name="Username" value="{{request.session.Username}}">
+        <input type="text" name="couponCode" class="col-lg-6 mx-auto" placeholder="Enter coupon code" style="font-weight: bold; border: 3px solid black;outline: none;">
+<div class="text-center">
+        <button class="btn btn-danger" type="submit">Apply Coupon</button>
+</div>
+      </div>
+    </form>
+
+    </div>
+</section>
+
+
+
+    <div class="billing_details justify-content-center">
+                  <form class="row contact_form" action="{% url 'payment_section'  %}" method="POST">
+    {% csrf_token %}
+
+      <div class="row ">
+    <h4 class="font-weight-bold mt-0 mb-4 ml-2 float-left mx-auto">Select your Delivery Address</h4><div class="col-lg-6 ">
+    {% for i in address %}
+    <div class="container">
+        <div class="card shadow my-2 col-lg-12">
+            <div class="card-body">
+                {% if i.default %}
+                <input type="radio" name="selected_address_id" value="{{ i.id }}" checked>
+                {% else %}
+                <input type="radio" name="selected_address_id" value="{{ i.id }}">
+                {% endif %}
+                <div class="container">
+                    <p><span style="font-weight:bold;">{{ i.firstname}} {{ i.lastname }}</span></p>
+                    <p><span style="font-weight:bold;">{{ i.address_line_1 }}</span></p>
+                    <p><span style="font-weight:bold;">{{ i.address_line_2 }},<span style="font-weight:bold;">{{ i.pincode }}</span></span></p>
+                    <p><span style="font-weight:bold;">{{ i.city }}</span>,
+                        <span style="font-weight:bold;">{{ i.state }}</span></p>
+                    <p><span style="font-weight:bold;">{{ i.phone }}</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+          </div>
+
+
+
+        <div class="col-lg-6">
+          <div class="order-details-wrap">
+            <table class="order-details" style="width:98%">
+              <thead>
+
+                <tr>
+                  <th>Your order Details</th>
+                  <th>Quantity</th>
+                  <th>Price</th>
+                </tr>
+              </thead>
+              <tbody class="order-details-body">
+                {% for i in data %}
+                <tr>
+
+                </tr>
+                <tr>
+                  <td>{{i.painting.pname}}</td>
+                  <td>x{{i.quantity}}</td>
+                  <td  style="text-align: right;">₹ {{i.tprice}}/-</td>
+                </tr>
+                {% endfor %}
+
+              </tbody>
+              <tbody class="checkout-details">
+                <tr>
+                  <td colspan="2" >Subtotal</td>
+                    <td  style="text-align: right;font-weight:bold;">₹ {{total_price}}/-</td>
+                </tr>
+                <tr>
+                    <td colspan="2" >Coupon Discount</td>
+                    <td  style="text-align: right;" id="discount-amount">₹ 0.0</td>
+                  </tr>
+                <tr>
+                <tr>
+                  <td colspan="2" >Shipping</td>
+                  <td  style="text-align: right;">₹ 70/-</td>
+                </tr>
+
+                  <td colspan="2" >Total</td>
+                    <td id="total-amount" style="text-align: right;font-weight:bold;">₹ {{total_price|add:70}}/-</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        </div>
+                      <center>
+                                 <input type="submit"  class="boxed-btn "  style="width:300px;color:white;font-weight:bold;text-transform: capitalize;margin:30px" value="Place Order">
+
+                         </center>
+                          </form>
+      </div>
+    </div>
+</section>
+
+<section class="section-content mt-3">
+    <article class="card shadow col-lg-10 mx-auto">
+                <br/>
+    <h2 class="mx-auto d-flex font-weight-bold">Add a new Address here</h2>
+                <div class="card-body"><div class="row">
+                        <div class="col-md-12">
+                            <form class="row contact_form" action="{% url 'save_address' %}" method="POST">
+                                {%csrf_token%}
+                                <div class="col-md-6 form-group p_star">
+                                    <input type="hidden" class="form-control" id="first"  name="Username" value="{{request.session.Username}}"  />
+                                    <label>First Name</label>
+                                    <input type="text" class="form-control" id="first"  name="firstname" placeholder="First Name"required />
+                                </div>
+                                <div class="col-md-6 form-group p_star">
+                                    <label>Last Name</label>
+                                    <input type="text" class="form-control" id="last"  name="lastname" placeholder="Last Name" required/>
+                                </div>
+                                <div class="col-md-6 form-group p_star">
+                                    <label>Phone Number</label>
+                                    <input type="text" class="form-control" id="phone"  name="phone"  placeholder="Phone Number"required  pattern="[0-9]+" title="Please enter only digits" maxlength="10"/>
+                                </div>
+                                <div class="col-md-6 form-group p_star">
+                                    <label>Email</label>
+                                    <input type="email" class="form-control" id="email"  name="email"placeholder="Email" required/>
+                                </div>
+                                <div class="col-md-6 form-group p_star">
+                                    <label>Address</label>
+                                    <input type="text" class="form-control" id="add1"  name="address_line_1" placeholder="Address"required/>
+                                </div>
+                                <div class="col-md-6 form-group p_star">
+                                    <label>Landmark</label>
+                                    <input type="text" class="form-control" id="add1"  name="address_line_2" placeholder="Landmark"required/>
+                                </div>
+
+                                <div class="col-md-6 form-group p_star">
+                                    <label>City</label><br>
+                                    <select class="form-select" id="id_city" name="city" required><br>
+                                        <option value="">Select city</option>
+                                        <option>Kochi</option>
+                                        <option>Kozhikode</option>
+                                        <option>Tvm</option>
+                                        <option>Thrissur</option>
+                                        <option>Kannur</option></select><br>
+                                </div>
+                                <div class="col-md-6 form-group p_star">
+                                    <label>State</label><br>
+                                    <select class="form-select" id="id_state" name="state" required><br>
+                                        <option value="">Select State</option>
+                                        <option>Kerala</option>
+                                        <option>Karnataka</option>
+                                        <option>Tamilnadu</option>
+                                        <option>Delhi</option>
+                                        <option>Maharashtra</option>
+                                    </select><br>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>Pin Code</label>
+                                    <input type="text" class="form-control" id="pincode" name="pincode"  placeholder="Pincode" required pattern="[0-9]+" title="Please enter only digits" maxlength="6"/>
+                                </div>
+                                <div class="form-group">
+                                    <input type="checkbox" name="default" value="true">Set as default
+                                </div>
+
+
+
+                                <br/><br/>
+                                <div class="col-sm-12 form-group p_star">
+                                    <center>
+                                            <input type="submit" class="cart-btn px-4 "  style="color:white;margin-left:20px;padding:9px;font-size:12px; border-radius:10px !important;" value="Save Changes">
+
+                                    </center>
+                                </div>
+                            </form>
+                        </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </article>
+
+        </main>
+        </div>
+        </div>
+    </section>
+
+
+</div>
+  </div>
+  <!-- end check out section -->
+
+<script>
+    // JavaScript to update selected address ID
+    document.querySelectorAll('input[name="selected_addresses"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            document.getElementById('selected_address_id').value = this.value;
+        });
+    });
+</script>
+
+<script>
+  // JavaScript to update total price after applying coupon code
+document.getElementById('coupon-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent form submission
+
+    // Get the coupon code
+    var couponCode = document.getElementsByName('couponCode')[0].value;
+
+    // Get the CSRF token
+    var csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+
+    // Make an AJAX request to apply the coupon code
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '{% url "apply_coupon" %}', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+    // Include the CSRF token in the request header
+    xhr.setRequestHeader('X-CSRFToken', csrfToken);
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+            if (response.success) {
+              location.reload();
+                var totalWithoutShipping = parseFloat(response.total_price);
+                var discountAmount = parseFloat(response.discount);
+                var shippingCharge = 70; // Assuming a fixed shipping charge of ₹70
+                var totalWithShipping = totalWithoutShipping + shippingCharge;
+
+                alert('Coupon applied successfully!');
+
+
+                // Update table cells with new values
+                document.getElementById('total-amount').textContent = '₹ ' + totalWithShipping.toFixed(2) + '/-';
+                document.getElementById('discount-amount').textContent = '- ₹ ' + discountAmount.toFixed(2) + '/-';
+
+                // Update shipping charge in the table
+                document.getElementById('shipping-charge').textContent = '₹ ' + shippingCharge.toFixed(2) + '/-';
+
+
+
+            } else {
+                alert(response.message); // Display error message if coupon code is invalid
+            }
+        }
+    };
+
+    // Send the coupon code and CSRF token in the request body
+    xhr.send('csrfmiddlewaretoken=' + encodeURIComponent(csrfToken) + '&couponCode=' + encodeURIComponent(couponCode));
+});
+
+</script>
+<script>
+  document.getElementById('remove-active-coupon-btn').addEventListener('click', function(event) {
+      event.preventDefault();
+
+      // Send an AJAX request to remove active coupons
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '{% url "remove_active_coupon" %}', true);
+      xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+      xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+      xhr.onreadystatechange = function() {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+              var response = JSON.parse(xhr.responseText);
+              if (response.success) {
+                location.reload();
+                  alert('Active coupons removed successfully!');
+                  // You can optionally reload the page or update the UI here
+              } else {
+                  alert('Failed to remove active coupons: ' + response.message);
+              }
+          }
+      };
+      xhr.send();
+  });
+</script>
+
+
+
+
+
+</body>
+</html>
+{%endblock%}
