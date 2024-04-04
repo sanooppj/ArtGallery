@@ -555,9 +555,11 @@ def ordersbook(request):
     return render(request,"profile_orders.html",{'orders': orders,'user_profile': user_profile})
 
 def order_view(request,order_id):
+    paintings=paintings_Db.objects.all()
+
     order=Order.objects.get(id=order_id)
     user_profile = Profile.objects.filter(Username=request.session['Username'])
-    return render(request,"order_view.html",{'order': order,'user_profile': user_profile})
+    return render(request,"order_view.html",{'order': order,'user_profile': user_profile,'paintings': paintings})
 
 def cancel_order(request, order_id):
     if request.method == "POST":
@@ -1119,7 +1121,8 @@ def place_order(request):
             item_total_price = cart_item.quantity * cart_item.price
             OrderItem.objects.create(
                 order=order,
-                painting=cart_item.painting,
+                picture=cart_item.painting.picture,
+                pname=cart_item.painting.pname,
                 quantity=cart_item.quantity,
                 price=cart_item.price,
                 total_price=item_total_price
@@ -1308,7 +1311,7 @@ def predict_artist(image_path):
 
 def search_painting(request):
     paintings=paintings_Db.objects.all()
-
+    user_profile = Profile.objects.filter(Username=request.session['Username'])
     artists = artist_Db.objects.all()
     uploaded_image_url = None
     predicted_artist = None  # Initialize predicted_artist to None
@@ -1334,59 +1337,62 @@ def search_painting(request):
         "predicted_artist": predicted_artist,
         "confidence_score": confidence_score,
         "uploaded_image_url": uploaded_image_url,
-        "paintings": paintings
+        "paintings": paintings,
+        "user_profile": user_profile
     })
 
 
-
 def learn_art(request):
-
     artists = artist_Db.objects.all()
+    user_profile = Profile.objects.filter(Username=request.session['Username'])
     record = Artclasses_Db.objects.all()
 
-    # Check if the 'Username' key exists in the session
     if 'Username' not in request.session:
-        # Store the current page's URL in the session
         request.session['redirect_to'] = request.build_absolute_uri()
-        # Add an info-level message
-        messages.warning(request, 'You need to log in first before going to tutorial section.')
-        # Redirect back to the current page
-        return redirect(
-            request.META.get('HTTP_REFERER', '/'))  # Redirect to the referrer or home page if referrer not available
+        messages.warning(request, 'You need to log in first before going to the tutorial section.')
+        return redirect(request.META.get('HTTP_REFERER', '/'))
 
-    # Check if the user has already subscribed
-    subscribed = Subscription_Db.objects.filter(Username=request.user.username).exists()
+    if request.method == 'POST':
+        amount = request.POST.get('amount')  # Get the selected amount from the form
+        # Perform necessary actions with the selected amount
+        order_currency = 'INR'
+        client = razorpay.Client(auth=('rzp_test_IzIBFTmzd3zzKk', 'mMvIdZd7a4EU1pMd9tSQEbE0'))
+        payment = client.order.create({'amount': amount, 'currency': "INR", 'payment_capture': '1'})
+        return render(request, "learn_art.html", {"payment": payment, "record": record, "artists": artists, "user_profile": user_profile})
+
+    subscribed = Subscription_Db.objects.filter(Username=request.session.get('Username', '')).exists()
     if subscribed:
-        return render(request, "learn_art.html", {"subscribed": True,"artists": artists})
+        return render(request, "learn_art.html", {"subscribed": True, "artists": artists, "user_profile": user_profile})
 
-    order_currency = 'INR'
-    client = razorpay.Client(auth=('rzp_test_IzIBFTmzd3zzKk', 'mMvIdZd7a4EU1pMd9tSQEbE0'))
-    payment = client.order.create({'amount': "50000", 'currency': "INR", 'payment_capture': '1'})
-    return render(request, "learn_art.html", {"payment": payment,"record": record,"artists": artists})
+    return render(request, "learn_art.html", {"artists": artists, "user_profile": user_profile})
+
 
 @csrf_exempt
 def learn_art_save(request):
     if request.method == "POST":
         username = request.POST.get('username')
-        amount = request.POST.get('amount')
+        package = request.POST.get('package')  # Get the selected package
+        amount = request.POST.get(f'amount_{package.lower()}')  # Fetch amount based on the selected package
         obj = Subscription_Db(Username=username, amount=amount)
         obj.save()
         messages.success(request, 'Subscription completed successfully!')
         return redirect('learn_art')
 
+
 def watercolour_painting(request):
     artists = artist_Db.objects.all()
-    subscribed = Subscription_Db.objects.filter(Username=request.user.username).exists()
+    subscribed = Subscription_Db.objects.filter(Username=request.session.get('Username', '')).exists()
     record = Artclasses_Db.objects.filter(mainheading="Water Colour Painting").first()
-    if subscribed:
-        return render(request, "learn_watercolour_painting.html",{"record":record,"artists":artists})
+
+    if record and subscribed:
+        return render(request, "learn_watercolour_painting.html", {"record": record, "artists": artists})
     else:
         messages.warning(request, 'You need to subscribe to access this content.')
         return redirect('learn_art')
 def digital_painting(request):
     artists = artist_Db.objects.all()
 
-    subscribed = Subscription_Db.objects.filter(Username=request.user.username).exists()
+    subscribed = Subscription_Db.objects.filter(Username=request.session.get('Username', '')).exists()
     record = Artclasses_Db.objects.filter(mainheading="Digital Painting").first()
     if subscribed:
         return render(request, "learn_digital_painting.html",{"record":record,"artists":artists})
@@ -1397,7 +1403,7 @@ def digital_painting(request):
 
 def oil_painting(request):
     artists = artist_Db.objects.all()
-    subscribed = Subscription_Db.objects.filter(Username=request.user.username).exists()
+    subscribed = Subscription_Db.objects.filter(Username=request.session.get('Username', '')).exists()
     record = Artclasses_Db.objects.filter(mainheading="Oil Painting").first()
     if subscribed:
         return render(request, "learn_oil_painting.html",{"record":record,"artists":artists})
@@ -1408,7 +1414,7 @@ def oil_painting(request):
 def encastic_painting(request):
     artists = artist_Db.objects.all()
 
-    subscribed = Subscription_Db.objects.filter(Username=request.user.username).exists()
+    subscribed = Subscription_Db.objects.filter(Username=request.session.get('Username', '')).exists()
     record = Artclasses_Db.objects.filter(mainheading="Encaustic Painting").first()
     if subscribed:
         return render(request, "learn_encastic_painting.html",{"record":record,"artists":artists})
@@ -1420,7 +1426,7 @@ def encastic_painting(request):
 def acrylic_painting(request):
     artists = artist_Db.objects.all()
 
-    subscribed = Subscription_Db.objects.filter(Username=request.user.username).exists()
+    subscribed = Subscription_Db.objects.filter(Username=request.session.get('Username', '')).exists()
     record = Artclasses_Db.objects.filter(mainheading="Acrylic Painting").first()
     if subscribed:
         return render(request, "learn_acrylic_painting.html",{"record":record,"artists":artists})
@@ -1432,7 +1438,7 @@ def acrylic_painting(request):
 def mixedmedia_painting(request):
     artists = artist_Db.objects.all()
 
-    subscribed = Subscription_Db.objects.filter(Username=request.user.username).exists()
+    subscribed = Subscription_Db.objects.filter(Username=request.session.get('Username', '')).exists()
     record = Artclasses_Db.objects.filter(mainheading="Mixed Media Painting").first()
     if subscribed:
         return render(request, "learn_mixedmedia_painting.html",{"record":record,"artists":artists})

@@ -99,7 +99,7 @@
                                    <span style="font-size:15px;font-weight:bold;color:rgb(237, 3, 3);">
                                         x{{ order_item.quantity }}
                                     </span>
-                            {{ order_item.painting.pname }} <!-- Display the product name -->
+                            {{ order_item.pname }} <!-- Display the product name -->
                             <!-- You can display other details of the product here -->
                             {% if not forloop.last %},{% endif %} <!-- Add comma if not the last item -->
                         {% empty %}

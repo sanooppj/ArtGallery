@@ -69,7 +69,7 @@
       <div class="row">
         <div class="col-lg-8 offset-lg-2 text-center">
           <div class="breadcrumb-text">
-            <p>Discover Inspiring Creations</p>
+            <p>Fresh and Organic</p>
             <h1>Check Out Product</h1>
           </div>
         </div>
@@ -91,22 +91,33 @@
         {% csrf_token %}
       <div class="cupon_area">
         <div class="check_title col-lg-9 mx-auto">
+          {% if coupon %}
           <h2 class="text-center font-weight-bold">
             Have a coupon?
           </h2>
 
-          <h2 class="text-center font-weight-bold" >Use <Code></Code><span style="color:#ff3368;">{{coupon.code}}</span> to avail <span style="color:#ff3368;">{{coupon.discount_percentage}}%</span> discount on your orders above <span style="color:#ff3368;">₹ {{coupon.minimum_price}}/-</span>, valid till <span style="color:#ff3368;">{{coupon.valid_to}}</span></h2>
 
+          <h2 class="text-center font-weight-bold">Use <b><Code  style="color:#ff3368;">{{ coupon.code }}</Code></b> to avail <code style="color:#ff3368;">{{ coupon.discount_percentage }}%</code> discount on your orders above <br><code style="color:#ff3368;">₹{{ coupon.minimum_price }}/-</code>, valid till <code style="color:#ff3368;">{{ coupon.valid_to }}</code></h2>
+      {% else %}
+          <h2 class="text-center font-weight-bold">No active coupons available</h2>
+      {% endif %}
         </div>
         <input type="hidden" name="Username" value="{{request.session.Username}}">
-        <input type="text" name="couponCode" class="col-lg-6 mx-auto" placeholder="Enter coupon code" style="font-weight: bold; border: 3px solid black;outline: none;">
+        <input type="text" name="couponCode" {% if coupon_code %} value="{{ coupon_code }}" {% else %} placeholder="Enter coupon code" {% endif %}
+        class="col-lg-6 mx-auto" style="font-weight: bold; border: 3px solid black;outline: none;">
 <div class="text-center">
-        <button class="btn btn-danger" type="submit">Apply Coupon</button>
+      {% if active_coupons %}
+      <button id="remove-active-coupon-btn" class="btn btn-danger" type="submit">Remove Coupon</button>
+    {% else %}
+      <button class="btn btn-success" type="submit">Apply Coupon</button>
+    {% endif %}
+
 </div>
       </div>
     </form>
 
     </div>
+
 </section>
 
 
@@ -173,17 +184,24 @@
                     <td  style="text-align: right;font-weight:bold;">₹ {{total_price}}/-</td>
                 </tr>
                 <tr>
-                    <td colspan="2" >Coupon Discount</td>
-                    <td  style="text-align: right;" id="discount-amount">₹ 0.0</td>
-                  </tr>
+                  <td colspan="2">Coupon Discount</td>
+                  {% if discounted_amount %}
+                  <td style="text-align: right;" id="discount-amount">₹ {{ discounted_amount }}/-</td>
+                  {% else %}
+                  <td style="text-align: right;" id="discount-amount">₹ 0.00</td>
+                  {% endif %}
+              </tr>
                 <tr>
                 <tr>
                   <td colspan="2" >Shipping</td>
                   <td  style="text-align: right;">₹ 70/-</td>
                 </tr>
-
                   <td colspan="2" >Total</td>
+                  {% if totalprice %}
+                    <td id="total-amount" style="text-align: right;font-weight:bold;">₹ {{totalprice|add:70}}/-</td>
+                    {% else %}
                     <td id="total-amount" style="text-align: right;font-weight:bold;">₹ {{total_price|add:70}}/-</td>
+                  {% endif %}
                 </tr>
               </tbody>
             </table>

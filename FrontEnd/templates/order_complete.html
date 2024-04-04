@@ -207,8 +207,8 @@ background-color: white;
                             <tbody>
                                 {% for item in order_items %}
                                 <tr>
-                                    <td class="text-center" style="padding-top: 3rem;">{{ item.painting.pname }}</td>
-                                    <td class="text-center"><img src="{{ item.painting.picture.url }}" style="height: 60px; width: 100px;object-fit:cover;border-radius:3px;" alt="IMG"/></td>
+                                    <td class="text-center" style="padding-top: 3rem;">{{ item.pname }}</td>
+                                    <td class="text-center"><img src="{{ item.picture.url }}" style="height: 60px; width: 100px;object-fit:cover;border-radius:3px;" alt="IMG"/></td>
                                     <td class="text-center" style="padding-top: 3rem;">₹ {{ item.price }}</td>
                                     <td class="text-center" style="padding-top: 3rem;">x{{ item.quantity }}</td>
                                     <td class="text-center" style="padding-top: 3rem;">₹ {{ item.total_price }}</td>

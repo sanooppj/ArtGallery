@@ -160,22 +160,23 @@ background-color: white;
       <div class="header-icons">
         <a class="wishlist-icon" href="{% url 'wishlist' %}"><i class="far fa-heart"></i></a>
         <a class="shopping-cart" href="{% url 'Cart_page' %}"><i class="fas fa-shopping-cart"></i></a>
-<a class="dropdown-toggle hidden-arrow " style="border: none; " href="#" id="navbarDropdownMenuLink" role="button" data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
-			<i class="fas fa-search"></i> <!-- Search icon -->
-		</a>
-		<ul class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdownMenuLink" style="background-color: rgb(180, 180, 180)" >
-			<li>
-				<div class="input-group mt-2 mx-2" >
-					<div class="form-outline w-auto" data-mdb-input-init >
-						<input type="search" id="search-input-dropdown" class="form-control" style="width: 280px;" />
-						<label class="form-label" for="search-input-dropdown" style="width: 200px;">Search</label>
-					</div>
-				</div>
-			</li>
-			{% for painting in paintings %}
-			<li class="dropdown-item" style=" display: none;"  data-name="{{ painting.pname }}"><a href="{% url 'Single_page' painting.id %}">{{ painting.pname }}</a></li>
-			{% endfor %}
-		</ul>
+<a class="dropdown-toggle hidden-arrow" style="border: none;" href="#" id="navbarDropdownMenuLink" role="button" data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
+    <i class="fas fa-search"></i> <!-- Search icon -->
+</a>
+<ul class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdownMenuLink" style="background-color: white;">
+    <li>
+        <div class="input-group mt-2 mx-2">
+            <div class="form-outline w-auto" data-mdb-input-init>
+                <input type="search" id="search-input-dropdown" class="form-control" style="width: 280px;" placeholder="Search here" />
+                <label class="form-label" for="search-input-dropdown" style="width: 200px;"></label>
+            </div>
+        </div>
+    </li>
+    {% for painting in paintings %}
+    <li class="dropdown-item" style="display: none;" data-name="{{ painting.pname }}"><a href="{% url 'Single_page' painting.id %}">{{ painting.pname }}</a></li>
+    {% endfor %}
+</ul>
+
       </div>
     </li>
   </ul>

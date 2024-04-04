@@ -90,7 +90,9 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    painting = models.ForeignKey(paintings_Db, on_delete=models.CASCADE)
+    picture = models.ImageField(upload_to="Images", null=True, blank=True,)
+    pname = models.CharField(max_length=30,blank=True,null=True)
+    quantity = models.IntegerField()
     quantity = models.IntegerField()
     price = models.IntegerField()
     total_price=models.IntegerField(null=True)

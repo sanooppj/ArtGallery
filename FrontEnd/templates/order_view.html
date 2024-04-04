@@ -215,22 +215,23 @@ background-color: white;
       <div class="header-icons">
         <a class="wishlist-icon" href="{% url 'wishlist' %}"><i class="far fa-heart"></i></a>
         <a class="shopping-cart" href="{% url 'Cart_page' %}"><i class="fas fa-shopping-cart"></i></a>
-<a class="dropdown-toggle hidden-arrow " style="border: none; " href="#" id="navbarDropdownMenuLink" role="button" data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
-			<i class="fas fa-search"></i> <!-- Search icon -->
-		</a>
-		<ul class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdownMenuLink" style="background-color: rgb(180, 180, 180)" >
-			<li>
-				<div class="input-group mt-2 mx-2" >
-					<div class="form-outline w-auto" data-mdb-input-init >
-						<input type="search" id="search-input-dropdown" class="form-control" style="width: 280px;" />
-						<label class="form-label" for="search-input-dropdown" style="width: 200px;">Search</label>
-					</div>
-				</div>
-			</li>
-			{% for painting in paintings %}
-			<li class="dropdown-item" style=" display: none;"  data-name="{{ painting.pname }}"><a href="{% url 'Single_page' painting.id %}">{{ painting.pname }}</a></li>
-			{% endfor %}
-		</ul>
+<a class="dropdown-toggle hidden-arrow" style="border: none;" href="#" id="navbarDropdownMenuLink" role="button" data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
+    <i class="fas fa-search"></i> <!-- Search icon -->
+</a>
+<ul class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdownMenuLink" style="background-color: white;">
+    <li>
+        <div class="input-group mt-2 mx-2">
+            <div class="form-outline w-auto" data-mdb-input-init>
+                <input type="search" id="search-input-dropdown" class="form-control" style="width: 280px;" placeholder="Search here" />
+                <label class="form-label" for="search-input-dropdown" style="width: 200px;"></label>
+            </div>
+        </div>
+    </li>
+    {% for painting in paintings %}
+    <li class="dropdown-item" style="display: none;" data-name="{{ painting.pname }}"><a href="{% url 'Single_page' painting.id %}">{{ painting.pname }}</a></li>
+    {% endfor %}
+</ul>
+
       </div>
     </li>
   </ul>
@@ -247,26 +248,6 @@ background-color: white;
 	<!-- end header -->
 
 
-<!-- search area -->
-	<div class="search-area">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<span class="close-btn"><i class="fas fa-window-close"></i></span>
-					<div class="search-bar">
-						<div class="search-bar-tablecell">
-							<form action="{% url 'search' %}" method="get">
-							<h3>Search For:</h3>
-							<input id="query" name="query" type="text" placeholder="Keywords">
-							<button type="submit">Search <i class="fas fa-search"></i></button>
-								</form>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- end search area -->
 
 <!-- Logout Modal -->
 <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
@@ -293,27 +274,6 @@ background-color: white;
     </div>
 </div>
 
-
-	<!-- search area -->
-	<div class="search-area">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<span class="close-btn"><i class="fas fa-window-close"></i></span>
-					<div class="search-bar">
-						<div class="search-bar-tablecell">
-							<form action="{% url 'search' %}" method="get">
-							<h3>Search For:</h3>
-							<input id="query" name="query" type="text" placeholder="Keywords">
-							<button type="submit">Search <i class="fas fa-search"></i></button>
-								</form>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- end search area -->
 
 
 
@@ -366,7 +326,7 @@ background-color: white;
                         <figure class="itemside align-items-center">
                           <div class="how-itemcart1">
                             <img
-                              src="{{ item.painting.picture.url }}"
+                              src="{{ item.picture.url }}"
                               style="height: 100px;width: 200px;object-fit: cover;"
                               alt="IMG"/>
                           </div>
@@ -583,6 +543,50 @@ background-color: white;
     });
   });
 </script>
+		<script>
+    const searchInputDropdown = document.getElementById('search-input-dropdown');
+    const dropdownToggle = document.getElementById('navbarDropdownMenuLink');
+    const dropdownOptions = document.querySelectorAll('.dropdown-item');
+    const MAX_DISPLAYED_OPTIONS = 5; // Maximum number of options to display
+
+    // Toggle dropdown menu visibility when dropdown button is clicked
+    dropdownToggle.addEventListener('click', () => {
+        const dropdownMenu = dropdownToggle.nextElementSibling;
+        dropdownMenu.classList.toggle('show');
+    });
+
+    // Filter dropdown items based on user input
+    searchInputDropdown.addEventListener('input', () => {
+        const filter = searchInputDropdown.value.toLowerCase();
+        let displayedCount = 0;
+
+        dropdownOptions.forEach((el) => {
+            const elText = el.textContent.trim().toLowerCase();
+            const isIncluded = elText.includes(filter);
+            if (!isIncluded || displayedCount >= MAX_DISPLAYED_OPTIONS) {
+                el.style.display = 'none'; // Hide items that don't match the input or exceed maximum displayed options
+            } else {
+                el.style.display = 'block'; // Show items that match the input
+                displayedCount++;
+            }
+        });
+    });
+
+    // Hide all dropdown items when the input is cleared
+    searchInputDropdown.addEventListener('blur', () => {
+        if (searchInputDropdown.value === '') {
+            dropdownOptions.forEach((el) => {
+                el.style.display = 'none';
+            });
+        }
+    });
+
+    // Clear input field when dropdown is closed
+    dropdownToggle.addEventListener('hidden.bs.dropdown', () => {
+        searchInputDropdown.value = ''; // Clear the input field
+    });
+</script>
+
 
 <script>
     $(document).ready(function() {

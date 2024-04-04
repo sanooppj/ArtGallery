@@ -67,7 +67,7 @@
                                   <tr>
                                       <td><input type="checkbox" name="selected_orders[]" value="{{ i.id }}"></td>
                                       <th scope="row">{{ i.order_id }}</th>
-                                      <td>{{ i.grand_total }}</td>
+                                      <td>Rs. {{ i.grand_total }}</td>
                                       {% if i.order_status != 'Order Cancelled' %}
                                       <td class="text-success">{{ i.order_status }}</td>
                                       {% else %}

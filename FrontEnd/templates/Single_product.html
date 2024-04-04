@@ -63,7 +63,7 @@
     {% if pro.description|length > 420 %}
         <p >
             {{ pro.description|slice:":420" }}
-            <span class="remaining-text" style="display: none;">{{ pro.description|slice:"420:" }}</span>
+            <span class="remaining-text" style="display: none;max-width:350px;">{{ pro.description|slice:"420:" }}</span>
         </p>
         <div class="customread float-right" >
             <button onclick="toggleRemainingText(this)" class="btn btn-outline-primary customreadbtn">Read more</button>

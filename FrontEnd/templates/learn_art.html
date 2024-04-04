@@ -4,6 +4,49 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <style>
+        /* Pricing Start */
+.pricing-item {
+    transition: .5s;
+
+}
+
+.pricing-item:hover {
+    box-shadow: 0 0 30px rgba(0, 0, 0, .5);
+    margin: -20px 0 20px 0;
+}
+
+.pricing-label {
+    border-bottom: 20px solid var(--bs-light);
+    border-radius: 0 0 300px 300px;
+    transition: .5s;
+}
+
+.pricing-item:hover .pricing-label {
+    border-color: rgba(0, 0, 0, .5);
+}
+
+.pricing-item:hover .pricing-label.pricing-featured {
+    border-color: rgba(255, 255, 255, .5);
+}
+.razorpay-payment{
+color:white;
+width:90px !important;
+height:38px;
+background-color:#F28123;
+border-color:#F28123;
+border-radius:8px;
+
+}
+		.razorpay-payment:hover
+		{
+		background-color:#051922 !important;
+		border-color:#051922 !important;
+border-radius:8px;
+
+		}
+
+    </style>
 </head>
 <body><!-- Your existing navigation bar code -->
 <nav class="main-menu" >
@@ -83,26 +126,6 @@
 	<!-- end header -->
 
 
-<!-- search area -->
-	<div class="search-area">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<span class="close-btn"><i class="fas fa-window-close"></i></span>
-					<div class="search-bar">
-						<div class="search-bar-tablecell">
-							<form action="{% url 'search' %}" method="get">
-							<h3>Search For:</h3>
-							<input id="query" name="query" type="text" placeholder="Keywords">
-							<button type="submit">Search <i class="fas fa-search"></i></button>
-								</form>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- end search area -->
 
 <!-- Logout Modal -->
 <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
@@ -135,7 +158,7 @@
 			<div class="row">
 				<div class="col-lg-8 offset-lg-2 text-center">
 					<div class="breadcrumb-text">
-						<p>Discover Inspiring Creations</p>
+						<p>Get 24/7 Support</p>
 						<h1>Art learning section</h1>
 					</div>
 				</div>
@@ -147,33 +170,133 @@
     {% if not  subscribed %}
     <form id="subscribe-form" method="post" action="{% url 'learn_art_save' %}">
         <h3>Subscribe here to access the contents.</h3>
-        <input type="hidden" name="username" value="{{ request.user.username }}">
-        <input type="hidden" name="amount" value="500">
+        <input type="hidden" name="username" value="{{ request.session.Username }}">
+        <input type="hidden" id="amount_basic" name="amount_basic" value="250">
+        <input type="hidden" id="amount_standard" name="amount_standard" value="500">
+        <input type="hidden" id="amount_premium" name="amount_premium" value="1000">
+        <input type="hidden" id="package" name="package">
+        <div class="container-fluid py-5">
+            <div class="container py-5">
+                <div class="text-center mb-5 wow fadeInUp" data-wow-delay=".3s">
+                    <h5 class="mb-2 px-3 py-1 text-dark rounded-pill d-inline-block border border-2 border-Warning">Our Pricing</h5>
+                </div>
+                <div class="row g-5">
+                    <div class="col-lg-4 col-md-6 col-sm-12 wow fadeInUp" data-wow-delay=".3s" >
+                        <div class="rounded bg-light pricing-item" style="background-color:#f2f0f0 !important;">
+                            <div class=" py-3 px-5 text-center rounded-top border-bottom border-dark" style="background-color: #F28123;">
+                                <h2 class="m-0" style="color: white;">Basic</h2>
+                            </div>
+                            <div class="px-4 py-5 text-center  pricing-label mb-2" style="background-color: #F28123;">
+                                <h1 class="mb-0" style="color:white; font-size: 30px;">₹ 250<span class=" fs-4 fw-normal" style="color:white;">/mo</span></h1>
+                                <p class="mb-0">Basic Package</p>
+                            </div>
+                            <div class="p-4 text-center fs-5" >
+                               <p><i class="fa fa-check text-success me-2"></i>Access to Exclusive Artworks</p>
+<p><i class="fa fa-check text-success me-2"></i>Personalized Art Recommendations</p>
+<p><i class="fa fa-times text-danger me-2"></i>Limited Edition Art Releases</p>
+<p><i class="fa fa-times text-danger me-2"></i>Live Art Demonstrations</p>
+<p><i class="fa fa-times text-danger me-2"></i>Interactive Art Workshops</p>
 
-        <script
-            src="https://checkout.razorpay.com/v1/checkout.js"
-            data-key="rzp_test_IzIBFTmzd3zzKk"
-            data-amount="50000"
-            data-currency="INR"
-            data-order_id="{{ order_id }}"
-            data-name="Art Gallery"
-            data-buttontext="Subscribe"
-            data-description="A Wild Sheep Chase is the third novel by Japanese author Haruki Murakami"
-            data-image="https://example.com/your_logo.jpg"
-            data-prefill.name="{{ request.user.get_full_name }}"
-            data-prefill.email="{{ request.user.email }}"
-            data-theme.color="blue"
-            data-payment-methods="card,upi,emi,netbanking,wallet">
+                                <button class="btn btn-primary razorpay-payment"   data-amount="250" data-package="Basic" data-amount-field-id="amount_basic">pay now </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12 wow fadeInUp" data-wow-delay=".3s">
+                        <div class="rounded bg-light pricing-item" style="background-color:#f2f0f0 !important;">
+                            <div class=" py-3 px-5 text-center rounded-top border-bottom border-dark" style="background-color: #F28123;">
+                                <h2 class="m-0" style="color: white;">Standard</h2>
+                            </div>
+                             <div class="px-4 py-5 text-center  pricing-label mb-2" style="background-color: #F28123;">
+                                <h1 class="mb-0" style="color:white; font-size: 30px;">₹ 500<span class=" fs-4 fw-normal" style="color:white;">/mo</span></h1>
+                                <p class="mb-0">Standard Package</p>
+                            </div>
+                            <div class="p-4 text-center fs-5">
+                            <p><i class="fa fa-check text-success me-2"></i>Access to Exclusive Artworks</p>
+							<p><i class="fa fa-check text-success me-2"></i>Personalized Art Recommendations</p>
+							<p><i class="fa fa-check text-success me-2"></i>Limited Edition Art Releases</p>
+							<p><i class="fa fa-times text-danger me-2"></i>Live Art Demonstrations</p>
+							<p><i class="fa fa-times text-danger me-2"></i>Interactive Art Workshops</p>
+                                <button class="btn btn-primary razorpay-payment"  data-amount="500" data-package="Standard" data-amount-field-id="amount_standard">pay now</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12 wow fadeInUp" data-wow-delay=".3s">
+                        <div class="rounded bg-light pricing-item" style="background-color:#f2f0f0 !important;">
+                            <div class=" py-3 px-5 text-center rounded-top border-bottom border-dark" style="background-color: #F28123;">
+                                <h2 class="m-0" style="color: white;">Premium</h2>
+                            </div>
+                            <div class="px-4 py-5 text-center  pricing-label mb-2" style="background-color: #F28123;">
+                                <h1 class="mb-0" style="color:white; font-size: 30px;">₹ 1000<span class=" fs-4 fw-normal" style="color:white;">/mo</span></h1>
+                                <p class="mb-0">Premium Package</p>
+                            </div>
+                            <div class="p-4 text-center fs-5">
+                                 <p><i class="fa fa-check text-success me-2"></i>Access to Exclusive Artworks</p>
+							<p><i class="fa fa-check text-success me-2"></i>Personalized Art Recommendations</p>
+							<p><i class="fa fa-check text-success me-2"></i>Limited Edition Art Releases</p>
+							<p><i class="fa fa-check text-success me-2"></i>Live Art Demonstrations</p>
+							<p><i class="fa fa-check text-success me-2"></i>Interactive Art Workshops</p>
+
+                                <button class="btn btn-primary razorpay-payment"  data-amount="1000" data-package="Premium" data-amount-field-id="amount_premium">pay now</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+        <script>
+       var razorpayButtons = document.querySelectorAll('.razorpay-payment');
+razorpayButtons.forEach(function(button) {
+    button.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        var amount = parseInt(button.getAttribute('data-amount'));
+        var package = button.getAttribute('data-package');
+
+        // Set the selected amount to the hidden input field
+        document.getElementById('package').value = package;
+
+        // Open Razorpay payment window
+        openCheckout(amount);
+    });
+});
+
+function openCheckout(amount) {
+    var options = {
+        key: 'rzp_test_IzIBFTmzd3zzKk',
+        amount: amount * 100, // Amount should be in paise
+        currency: 'INR',
+        name: 'Art Gallery',
+        description: 'A Wild Sheep Chase is the third novel by Japanese author Haruki Murakami',
+        image: 'https://example.com/your_logo.jpg',
+        prefill: {
+            name: '{{ request.user.get_full_name }}',
+            email: '{{ request.user.email }}'
+        },
+        theme: {
+            color: 'blue'
+        },
+        payment_method: ['card', 'upi', 'emi', 'netbanking', 'wallet'],
+        handler: function(response) {
+            // Handle the response from Razorpay
+            console.log(response);
+            // Optionally, you can submit the form with the payment details
+            document.getElementById('subscribe-form').submit();
+        }
+    };
+    var rzp = new Razorpay(options);
+    rzp.open();
+}
+
         </script>
     </form>
+
 
     {% endif %}
 </div>
 
-
-
-<!-- latest news -->
-	<div class="latest-news pt-150 pb-150">
+<div class="latest-news pt-150 pb-150">
 		<div class="container">
 
 			<div class="row">
@@ -199,7 +322,7 @@
 								<span class="author"><i class="fas fa-user"></i> Admin</span>
 								<span class="date"><i class="fas fa-calendar"></i> 10 march, 2024</span>
 							</p>
-							<a href="{% url 'watercolour_painting' %}" class="cart-btn" style="color:white;">clik here</a>
+							<a href="{% url 'watercolour_painting' %}" class="cart-btn" style="color:white;">click here</a>
 						</div>
 					</div>
 				</div>
@@ -215,7 +338,7 @@
 								<span class="author"><i class="fas fa-user"></i> Admin</span>
 								<span class="date"><i class="fas fa-calendar"></i> 10 march, 2024</span>
 							</p>
-							<a href="{% url 'digital_painting' %}" class="cart-btn" style="color:white;">clik here</a>
+							<a href="{% url 'digital_painting' %}" class="cart-btn" style="color:white;">click here</a>
 						</div>
 					</div>
 				</div>
@@ -228,7 +351,7 @@
 								<span class="author"><i class="fas fa-user"></i> Admin</span>
 								<span class="date"><i class="fas fa-calendar"></i> 10 march, 2024</span>
 							</p>
-							<a href="{% url 'oil_painting' %}" class="cart-btn">clik here</a>
+							<a href="{% url 'oil_painting' %}" class="cart-btn">click here</a>
 						</div>
 					</div>
 				</div>
@@ -244,7 +367,7 @@
 								<span class="author"><i class="fas fa-user"></i> Admin</span>
 								<span class="date"><i class="fas fa-calendar"></i> 10 march, 2024</span>
 							</p>
-							<a href="{% url 'acrylic_painting' %}" class="cart-btn" style="color:white;">clik here</a>
+							<a href="{% url 'acrylic_painting' %}" class="cart-btn" style="color:white;">click here</a>
 						</div>
 					</div>
 				</div>
@@ -260,7 +383,7 @@
 								<span class="author"><i class="fas fa-user"></i> Admin</span>
 								<span class="date"><i class="fas fa-calendar"></i> 10 march, 2024</span>
 							</p>
-							<a href="{% url 'encastic_painting' %}" class="cart-btn" style="color:white;">clik here</a>
+							<a href="{% url 'encastic_painting' %}" class="cart-btn" style="color:white;">click here</a>
 						</div>
 					</div>
 				</div>
@@ -273,7 +396,7 @@
 								<span class="author"><i class="fas fa-user"></i> Admin</span>
 								<span class="date"><i class="fas fa-calendar"></i> 10 march, 2024</span>
 							</p>
-							<a href="{% url 'mixedmedia_painting' %}" class="cart-btn">clik here</a>
+							<a href="{% url 'mixedmedia_painting' %}" class="cart-btn">click here</a>
 						</div>
 					</div>
 				</div>
@@ -281,7 +404,7 @@
 
 		</div>
 	</div>
-	<!-- end latest news -->
+
 
 </body>
 </html>
