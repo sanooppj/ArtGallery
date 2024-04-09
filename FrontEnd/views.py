@@ -718,9 +718,6 @@ def Shop(request):
     return render(request, "Shop.html", {"paintings": paintings,"user_profile": user_profile, "total_paintings": total_paintings,"artists":artists,"data":data})
 
 
-from django.shortcuts import render
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import JsonResponse
 
 @never_cache
 def shop_filter(request):
@@ -758,6 +755,7 @@ def Cart_page(request):
     paintings=paintings_Db.objects.all()
 
     artists=artist_Db.objects.all()
+
     # Check if the 'Username' key exists in the session
     if 'Username' not in request.session:
         # Store the current page's URL in the session
@@ -775,7 +773,7 @@ def Cart_page(request):
         for i in data:
             total_price = total_price + i.tprice
         AppliedCoupon.objects.filter(Username=request.session['Username'], is_active=True).delete()
-        return render(request, "Cart.html", {'data': data,'painitngs': paintings, 'total_price': total_price, 'user_profile': user_profile,"artists":artists})
+        return render(request, "Cart.html", {'data': data,'paintings': paintings, 'total_price': total_price, 'user_profile': user_profile,"artists":artists})
 
 
 def save_cart(request):
