@@ -82,6 +82,7 @@ class Order(models.Model):
     shipping = models.IntegerField(blank=True,null=True)
     grand_total = models.IntegerField(blank=True,null=True)
     amount_to_be_paid = models.IntegerField(blank=True,null=True)
+    is_deleted = models.BooleanField(default=False)
     payment_method = models.CharField(max_length=50)
     order_status =models.CharField(max_length=50,choices=STATUS,default='Order Confirmed')
     created_at = models.DateTimeField(auto_now_add=True)  # Automatically set when the object is first created

@@ -569,25 +569,28 @@ def cancel_order(request, order_id):
         messages.success(request, 'Order has been cancelled successfully.')
         return redirect(reverse('order_view', args=[order_id]))
 
+from django.http import JsonResponse
+from django.contrib import messages
+from django.views.decorators.http import require_POST
+
+@require_POST
 def delete_selected_orders(request):
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         selected_orders = request.POST.getlist('selected_orders[]')
 
-        # Perform deletion of selected orders from the OrderItem database
-        deleted_order_items_count, _ = OrderItem.objects.filter(order_id__in=selected_orders).delete()
+        # Update the is_deleted flag instead of deleting the records
+        updated_count = Order.objects.filter(id__in=selected_orders).update(is_deleted=True)
 
-        # Perform deletion of selected orders from the Order database
-        deleted_orders_count, _ = Order.objects.filter(id__in=selected_orders).delete()
-
-        if deleted_order_items_count > 0 or deleted_orders_count > 0:
-            messages.success(request, 'Selected orders deleted successfully.')
+        if updated_count > 0:
+            messages.success(request, f'Selected orders marked as deleted successfully.')
         else:
-            messages.warning(request, 'No orders were deleted.')
+            messages.warning(request, 'No orders were marked as deleted.')
 
         return JsonResponse({'status': 'success'})  # Return JSON response for AJAX requests
     else:
         messages.error(request, 'Invalid request.')
         return JsonResponse({'status': 'error'}, status=400)
+
 
 def delete_account(request):
     if request.method == 'POST':

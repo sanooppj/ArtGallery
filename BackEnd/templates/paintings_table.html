@@ -117,15 +117,7 @@
                         {{ i.no_copies }}</td>
                         <td class="max-width-availability">{{ i.artist_name }}</td>
                         <td><img src="{{ i.artist_picture.url }}" alt="Category Image"></td>
-                        <td class="action-container">
-                            <a href="{% url 'paintings_edit' p_id=i.id %}">
-                                <img src="{% static 'admin2/edit.png' %}" alt="Edit Icon" style="width: 20px; height: 20px;">
-                            </a></td>
-                        <td class="action-container" >
-                            <a href="{% url 'paintings_delete' p_id=i.id %}">
-                                <img src="{% static 'admin2/delete.png' %}" style="margin-left:-10px;" alt="delete Icon" style="width: 35px; height: 35px;">
-                            </a>
-                        </td>
+
                     </tr>
                 </tbody>
                 {% endfor %}

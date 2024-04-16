@@ -96,6 +96,8 @@ def paintings_delete(req,p_id):
     return redirect(paintings_table)
 
 
+
+
 def paintings_type_form(request):
     return render(request, "paintings_type_form.html")
 
