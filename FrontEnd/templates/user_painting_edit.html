@@ -110,7 +110,7 @@
             </div>
         </div>
     </li>
-    {% for painting in paintings %}
+    {% for painting in paintingss %}
     <li class="dropdown-item" style="display: none;" data-name="{{ painting.pname }}"><a href="{% url 'Single_page' painting.id %}">{{ painting.pname }}</a></li>
     {% endfor %}
 </ul>

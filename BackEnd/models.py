@@ -5,6 +5,10 @@ from django.db import models
 # Create your models here.
 
 class paintings_Db(models.Model):
+    STATUS = (
+        ('In Stock', 'In Stock'),
+        ('Out Of Stock', "Out Of Stock"),  
+    )
     username=models.CharField(max_length=20,null=True,blank=True)
     pname = models.CharField(max_length=20, null=True, blank=True)
     picture = models.ImageField(upload_to="Images", null=True, blank=True)
@@ -15,6 +19,8 @@ class paintings_Db(models.Model):
     no_copies = models.IntegerField(null=True, blank=True)
     artist_name = models.CharField(max_length=20, null=True, blank=True)
     artist_picture = models.ImageField(upload_to="Images", null=True, blank=True, default='../Images/usericon11.png')
+    status =models.CharField(max_length=50,choices=STATUS,default='In Stock')
+
 
 class painting_type_Db(models.Model):
     type=models.CharField(max_length=20,null=True,blank=True)

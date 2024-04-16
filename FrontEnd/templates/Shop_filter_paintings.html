@@ -1,3 +1,12 @@
+<style>
+    .green-text {
+    color: green;
+}
+
+.red-text {
+    color: red;
+}
+</style>
 {% if paintings %}
     <div class="row product-lists">
         {% for i in paintings %}
@@ -10,6 +19,12 @@
                         <h6 class="truncate-text" style="font-size:16px;margin-bottom:5px;">{{ i.pname }}</h6>
                     </div>
                     <p class="product-price"><span></span>Rs. {{ i.price }}/-</p>
+                    <p class="product-price">
+                        <span></span>  
+                        <span class="{% if i.status == 'In Stock' %}green-text{% elif i.status == 'Out Of Stock' %}red-text{% endif %}">
+                            {{ i.status }}
+                        </span>
+                    </p>
                     <a href="{% url 'Single_page' p_id=i.id %}" class="cart-btn" style="font-size: 13px !important;">View</a>
                 </div>
             </div>

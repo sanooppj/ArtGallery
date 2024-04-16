@@ -84,6 +84,13 @@ height: 100px !important;
         #deleteModal .modal-footer button {
     margin-top: 30px; /* Adjust this value as needed */
 }
+.green-text {
+    color: green;
+}
+
+.red-text {
+    color: red;
+}
 
 
     </style>
@@ -124,6 +131,12 @@ height: 100px !important;
                 <h6 class="truncate-text">{{ i.product.pname }}</h6>
             </div>
             <p class="product-price"><span></span> Rs. {{i.product.price}}/-</p>
+            <p class="product-price">
+                <span></span>  
+                <span class="{% if i.product.status == 'In Stock' %}green-text{% elif i.product.status == 'Out Of Stock' %}red-text{% endif %}">
+                    {{ i.product.status }}
+                </span>
+            </p>
             <a href="{% url 'Single_page' p_id=i.product.id %}" class="cart-btn px-3" style="padding: 4px; font-size: 11px !important; border-radius: 4px;">View</a>
             &nbsp;
             <input type="hidden" name="painting_id" value="{{ i.id }}">

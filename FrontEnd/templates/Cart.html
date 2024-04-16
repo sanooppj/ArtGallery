@@ -251,7 +251,7 @@ height: 50px !important;
                                     <td class="product-name">{{ item.painting.pname }}</td>
                                     <td class="product-price">₹ {{ item.painting.price }}/-</td>
                                     <td class="product-quantity">
-                                        <input type="number" min="1" value="{{ item.quantity }}" name="quantity_{{ item.id }}" class="quantity-input" data-item-id="{{ item.id }}" data-original-quantity="{{ item.quantity }}">
+                                        <input type="number" max="{{item.painting.no_copies}}" min="1" value="{{ item.quantity }}" name="quantity_{{ item.id }}" class="quantity-input" data-item-id="{{ item.id }}" data-original-quantity="{{ item.quantity }}">
                                     </td>
                                     <td class="product-total">
                                         <input type="text" style="border: none; outline: none;background-color: white;width: 150px;margin-left: 30px; font-size: 16px;" class="form-control total-input" value="₹ {{ item.tprice }}/-" readonly>

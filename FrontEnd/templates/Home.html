@@ -180,7 +180,7 @@ background-color: white;
 
     .countdown-item {
         text-align: center !important;
-        border: 2px solid #F28123; !important;
+        border: 2px solid #F28123 !important;
         padding: 5px !important;
         width: 80px !important;
 
@@ -195,7 +195,7 @@ background-color: white;
     .countdown-value {
         font-size: 28px !important;
         font-weight: bold !important;
-        color: #F28123; !important;
+        color: #F28123 !important;
     }
 
 .premium-label {
@@ -232,6 +232,13 @@ background-color: white;
 	.dropdown-item a:hover {
     color: #d06207 !important; /* Change this to your desired hover color */
     font-size:12px;
+}
+.green-text {
+    color: green;
+}
+
+.red-text {
+    color: red;
 }
 
 
@@ -499,6 +506,13 @@ background-color: white;
 						<h6 class="truncate-text" style="font-size:16px;margin-bottom:5px;"> {{ painting.pname }}</h6>
 					</div>
                         <p class="product-price"><span></span> Rs. {{ painting.price }}/- </p>
+						
+                        <p class="product-price">
+							<span></span>  
+							<span class="{% if painting.status == 'In Stock' %}green-text{% elif painting.status == 'Out Of Stock' %}red-text{% endif %}">
+								{{ painting.status }}
+							</span>
+						</p>
                         <a href="{% url 'Single_page' p_id=painting.id %}" class="cart-btn" style="font-size: 13px !important;">View</a>
                     </div>
                 </div>
@@ -566,7 +580,6 @@ background-color: white;
         	<h3>December sale is on! <br> with big <span class="orange-text">Discount...</span></h3>
             <div class="sale-percent"><span>Sale! <br> Upto</span>50% <span>off</span></div>
             <a href="{% url 'Shop' %}" class="cart-btn btn-lg">Shop Now</a>
-        </div>
         </div>
     </section>
 	<!-- end shop banner -->

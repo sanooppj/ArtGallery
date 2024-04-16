@@ -25,6 +25,13 @@
     margin-top:10px;
     margin-bottom:10px;
 }
+.green-text {
+    color: green;
+}
+
+.red-text {
+    color: red;
+}
 
 
 	</style>
@@ -58,7 +65,9 @@
 					<div class="single-product-content">
 						<h2 style="font-size:40">{{pro.pname}}</h2>
 
-						<p class="single-product-pricing"><span>Per Painting</span> ₹ {{pro.price}} /-</p>
+						<p class="single-product-pricing"><span class="{% if pro.status == 'In Stock' %}green-text{% elif pro.status == 'Out Of Stock' %}red-text{% endif %}">
+							{{ pro.status }}
+						</span> ₹ {{pro.price}} /-</p>
 	<div>
     {% if pro.description|length > 420 %}
         <p >
@@ -82,9 +91,8 @@
 								<input type="hidden" name="action" id="action" value=""> <!-- Updated to have an id -->
 								<input type="hidden" class="form-control" name="pname" value="{{ pro.pname }}">
 								<input type="hidden" class="form-control" placeholder="Price" name="price" value="{{ pro.price }}" id="price">
-								<input type="number" min="1" max="" value="1" placeholder="Quantity" id="qty" name="quantity" style="border-radius: 30px;"><br>
 								<input type="hidden" class="form-control" placeholder="{{ pro.tprice }}" name="tprice" id="total">
-								<input type="hidden" name="painting_id" value="{{ pro.id }}">
+								<input type="hidden" name="painting_id" value="{{ pro.id }}"><br>
 
 								<button style="border:none;outline:none;background-color:white;margin-left: -5px;" class="cart-btn" type="submit" onclick="setAction('cart')"><a class="cart-btn"><i class="fas fa-shopping-cart"></i> Go to Cart</a></button>
 								<button style="border:none;outline:none;background-color:white;margin-left: -5px;" class="cart-btn " type="submit" onclick="setAction('wishlist')"><a class="cart-btn"><i class="far fa-heart"></i> Add to Wishlist</a></button>
@@ -98,13 +106,16 @@
 								<input type="hidden" class="form-control" name="Username" value="{{ request.session.Username }}">
 								<input type="hidden" name="action" id="action" value=""> <!-- Updated to have an id -->
 								<input type="hidden" class="form-control" name="pname" value="{{ pro.pname }}">
-								<input type="hidden" class="form-control" placeholder="Price" name="price" value="{{ pro.price }}" id="price">
-								<input type="number" min="1" max="" value="1" placeholder="Quantity" id="qty" name="quantity" style="border-radius: 30px;"><br>
+								<input type="hidden" class="form-control" placeholder="Price" name="price" value="{{ pro.price }}" id="price"><br>
+								{% if pro.status == 'In Stock' %}
+								<input type="number" min="1" max="{{ pro.no_copies }}" value="1" placeholder="Quantity" id="qty" name="quantity" style="border-radius: 30px;"><br>
+								
 								<input type="hidden" class="form-control" placeholder="{{ pro.tprice }}" name="tprice" id="total">
+								{% endif %}
 								<input type="hidden" name="painting_id" value="{{ pro.id }}">
 
-								<button style="border:none;outline:none;background-color:white;margin-left: -5px;font-size:14px; border-radius:5px !important;" ><a class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a></button>
-								<button style="border:none;outline:none;background-color:white;margin-left: -5px;" class="cart-btn " type="submit" onclick="setAction('wishlist')"><a class="cart-btn"><i class="far fa-heart"></i> Add to Wishlist</a></button>
+								<button style="border:none;outline:none;background-color:white;margin-left: -5px;font-size:14px; border-radius:5px !important;" onclick="setAction('cart')"  ><a class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a></button>
+								<button style="border:none;outline:none;background-color:white;margin-left: -5px;" class="cart-btn " type="submit" onclick="setAction('wishlist')" ><a class="cart-btn"><i class="far fa-heart"></i> Add to Wishlist</a></button>
 							</form>
 
 						</div>
@@ -145,6 +156,12 @@
 						<h6 class="truncate-text" style="font-size:16px;margin-bottom:5px;"> {{ painting.pname }}</h6>
 					</div>
                         <p class="product-price"><span></span> Rs. {{ painting.price }}/- </p>
+						<p class="product-price">
+							<span></span>  
+							<span class="{% if painting.status == 'In Stock' %}green-text{% elif painting.status == 'Out Of Stock' %}red-text{% endif %}">
+								{{ painting.status }}
+							</span>
+						</p>
                         <a href="{% url 'Single_page' p_id=painting.id %}" class="cart-btn" style="font-size: 13px !important;">View</a>
                     </div>
                 </div>

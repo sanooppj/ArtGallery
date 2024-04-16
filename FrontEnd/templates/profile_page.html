@@ -158,6 +158,7 @@
 }
 
 /* Define the color when the button is clicked or active */
+    .customarrows.active,
     .customarrows:active {
         color: #051922 !important;
     }
@@ -770,7 +771,7 @@
         {% for message in messages %}
             <div class="alert alert-{{ message.tags }}">
                 {% if message.tags == 'error' %}
-                    <img src="{% static 'Web/assets/img/error-icon.jpg' %}" alt="Error Icon" style="margin-right:10px;" width="30px" height="40px"> <!-- Replace path/to/error-image.jpg with the path to your error image -->
+                    <img src="{% static 'Web/assets/img/error-icon.png' %}" alt="Error Icon" style="margin-right:10px;" width="30px" height="40px"> <!-- Replace path/to/error-image.jpg with the path to your error image -->
                                 {{ message }}
 
 				{% endif %}

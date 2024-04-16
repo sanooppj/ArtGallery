@@ -88,14 +88,15 @@ def paintings_update(request, p_id):
             artist_name=h,
             artist_picture=artist_file,  # Update artist picture
         )
+        if int(g) > 0:
+            paintings_Db.objects.filter(id=p_id).update(status='In Stock')
+            
         return redirect(paintings_table)
 
 def paintings_delete(req,p_id):
     data=paintings_Db.objects.get(id=p_id)
     data.delete()
     return redirect(paintings_table)
-
-
 
 
 def paintings_type_form(request):
@@ -301,12 +302,12 @@ def user_orders(request):
     users = SignUp_Db.objects.all()
     return render(request, "user_orders.html", {"users": users})
 
+from django.shortcuts import render, get_object_or_404
 
 def order_details(request, username):
     user = get_object_or_404(SignUp_Db, Username=username)
-    orders = Order.objects.filter(Username=username)
+    orders = Order.objects.filter(Username=username, is_deleted=False)
     return render(request, "order_status.html", {"user": user, "orders": orders})
-
 
 
 

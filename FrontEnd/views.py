@@ -591,7 +591,6 @@ def delete_selected_orders(request):
         messages.error(request, 'Invalid request.')
         return JsonResponse({'status': 'error'}, status=400)
 
-
 def delete_account(request):
     if request.method == 'POST':
         # Get the username or email of the logged-in user
@@ -691,6 +690,7 @@ def Single_page(request, p_id):
     return render(request, "Single_product.html",
                   {'pro': pro, 'existing_item': existing_item, 'paintings': paintings,
                    'user_profile': user_profile, 'artists': artists, 'paintings': paintings})
+
 @never_cache
 def Shop(request):
     artists=artist_Db.objects.all()
@@ -788,6 +788,18 @@ def save_cart(request):
         tp = (request.POST.get('tprice', 0))
         action = request.POST.get('action')
 
+        try:
+            painting = paintings_Db.objects.get(id=painting_id)
+            if painting.status == 'Out Of Stock':
+                if action == 'cart':
+                    messages.warning(request, 'The painting is out of stock')
+                    return redirect('Single_page', p_id=painting_id)
+            
+        except paintings_Db.DoesNotExist:
+            return HttpResponse("The specified painting does not exist.", status=404)
+
+            
+
         if action == 'wishlist':  # Check if the action is 'wishlist'
             # Check if the product is already in the wishlist
             if WishlistDb.objects.filter(product_id=painting_id, Username=un).exists():
@@ -821,7 +833,7 @@ def save_cart(request):
                 return redirect('Cart_page')
 
             else:
-                # If the item does not exist, create a new entry in the cart
+                
                 obj = CartDb(Username=un, painting=painting, quantity=qty, price=pr, tprice=tp)
                 obj.save()
                 messages.success(request, 'The painting is  added to cart')
@@ -1114,6 +1126,15 @@ def place_order(request):
             order_status='Order Confirmed',
             created_at=created_at
         )
+        selected_painting_name = request.POST.get('painting_name')
+        quantity_purchased = request.POST.get('quantity')
+        selected_painting = paintings_Db.objects.get(pname=selected_painting_name)
+        new_quantity = selected_painting.no_copies - int(quantity_purchased)
+        selected_painting.no_copies = new_quantity
+        selected_painting.save()
+        if new_quantity == 0:
+                selected_painting.status = 'Out Of Stock'
+                selected_painting.save()
 
         cart_items = CartDb.objects.filter(Username=username)
 
@@ -1128,11 +1149,15 @@ def place_order(request):
                 price=cart_item.price,
                 total_price=item_total_price
             )
+        
 
         # Clear the cart after placing the order
         cart_items.delete()
         messages.success(request, "Your order has been placed successfully!..")
         return redirect('order_confirmed', order_id=order_id)
+
+
+
 @never_cache
 def order_confirmed(request, order_id):
     order = Order.objects.get(order_id=order_id)
@@ -1204,8 +1229,9 @@ def user_painting_edit(request,p_id):
     data = painting_type_Db.objects.all()
     artists=artist_Db.objects.all()
     paintings = paintings_Db.objects.get(id=p_id)
+    paintingss = paintings_Db.objects.all()
     user_profile = Profile.objects.filter(Username=request.session['Username'])
-    return render(request, "user_painting_edit.html",{"paintings":paintings,"user_profile":user_profile,"artists":artists,"data":data})
+    return render(request, "user_painting_edit.html",{"paintings":paintings,"paintingss":paintingss,"user_profile":user_profile,"artists":artists,"data":data})
 
 def user_painting_update(request, p_id):
     if request.method == "POST":
@@ -1235,6 +1261,7 @@ def user_painting_update(request, p_id):
         if not h:
             h = 'Images/usericon1.png'
 
+
         paintings_Db.objects.filter(id=p_id).update(
             username=z,
             pname=a,
@@ -1247,6 +1274,9 @@ def user_painting_update(request, p_id):
             artist_name=h,
             artist_picture=artist_file,  # Update artist picture
         )
+        if int(g) > 0:
+            paintings_Db.objects.filter(id=p_id).update(status='In Stock')
+
         return redirect(profile_user_paintings)
 
 
