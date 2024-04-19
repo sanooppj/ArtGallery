@@ -83,6 +83,7 @@ def save_user(request):
         password = request.POST.get('password')
         cpassword = request.POST.get('confirm_password')
 
+
         # Check email
         if SignUp_Db.objects.filter(Email=email).exists():
             messages.error(request, 'Email already exists!')
@@ -859,12 +860,12 @@ def Update_cart(request):
                     new_quantity = int(value)
 
                     if old_quantity != new_quantity:
-                        # Check if the new quantity exceeds the maximum allowed quantity (e.g., 10)
-                        if new_quantity > 10:  # Adjust the limit as per your requirement
+                        # Check if the new quantity exceeds the maximum allowed quantity (e.g., 50)
+                        if new_quantity > 50:  # Adjust the limit as per your requirement
                             message = f'Maximum quantity reached for this painting'
                             messages.warning(request, mark_safe(message))
                             # If the quantity exceeds the limit, set the quantity to the maximum allowed
-                            new_quantity = 10  # Or any other limit you want
+                            new_quantity = 50  # Or any other limit you want
                             cart_item.quantity = new_quantity
                             cart_item.tprice = cart_item.price * new_quantity
                             cart_item.save()
