@@ -395,6 +395,28 @@
       <form action="{% url 'place_order' %}" method="POST">
         {% csrf_token %}
           <input type="hidden" name="Username" value="{{request.session.Username}}">
+          <input type="hidden" value="{{ selected_address.id }}" name="selected_address_id">
+    <input type="hidden" class="form-control" value="{{ selected_address.firstname }}" name="first_name" placeholder="First Name" required />
+    <input type="hidden" class="form-control" value="{{ selected_address.lastname }}" name="last_name" placeholder="Last Name" required />
+    <input type="hidden" class="form-control" value="{{ selected_address.phone }}" name="phone" placeholder="Phone Number" required />
+    <input type="hidden" class="form-control" value="{{ selected_address.email }}" name="email" placeholder="Email" required />
+                {% for i in data %}
+                <input type="hidden" class="form-control" value="{{ i.painting.pname }}" name="painting_name" placeholder="Painting Name" required/>
+                <input type="hidden" class="form-control" value="{{ i.painting.picture }}" name="painting_picture" placeholder="Painting Picture" required/>
+                <input type="hidden" class="form-control" value="{{ i.price }}" name="price" placeholder="Price" required/>
+                <input type="hidden" class="form-control" value="{{ i.quantity }}" name="quantity" placeholder="Quantity" required/>
+                {% endfor %}
+    <input type="hidden" class="form-control" value="{{ coupon_discount }}" name="discount" required/>
+    <input type="hidden" class="form-control" value="{{ selected_address.address_line_1 }}" name="address_line_1" placeholder="Address 1" required />
+    <input type="hidden" class="form-control" value="{{ selected_address.address_line_2 }}" name="address_line_2" placeholder="Address 2" required />
+    <input type="hidden" class="form-control" value="{{ selected_address.city }}" name="city" placeholder="City" required />
+    <input type="hidden" class="form-control" value="{{ selected_address.state }}" name="state" placeholder="State" required />
+    <input type="hidden" class="form-control" value="{{ addressSelected.pincode }}" name="zip_code" placeholder="Postcode/ZIP" required />
+    <input type="hidden" class="form-control" value="{{ total_price }}" name="total_price" required />
+    <input type="hidden" class="form-control" value="70" name="shipping" required />
+    <input type="hidden" class="form-control" value="{{ grand_total }}" name="grand_total" required />
+    <input type="hidden" class="form-control" value="{{ grand_total }}" name="amountToBePaid" required />
+    <input type="hidden" value="Razorpay" name="payment_method">
 
 <script
     src="https://checkout.razorpay.com/v1/checkout.js"
